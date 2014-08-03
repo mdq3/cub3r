@@ -25,7 +25,7 @@ Project Directories
     /src          - all source code for project
     /include      - all header files for project
     /bin          - compiled binaries
-    /resources    - extra resources the project uses
+    /resources    - extra resources required by the program
         /models   - models used in program
         /scripts  - scripts used to generate resources
         /shaders  - GLSL shaders
