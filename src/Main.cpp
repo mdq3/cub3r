@@ -44,8 +44,8 @@ void Main::init()
 
 void Main::initModels()
 {
-	const char* vert = "../resources/shaders/lighting.vert";
-	const char* frag = "../resources/shaders/lighting.frag";
+	const char* vert = "../resources/shaders/shader.vert";
+	const char* frag = "../resources/shaders/shader.frag";
 	GLuint shaderProgram = createShaderProgram(vert, frag);
 
 	glUseProgram(shaderProgram);
