@@ -14,12 +14,12 @@ import math
 context = bpy.context
 scene = context.scene
 
-# Apply correction to vertex: swap Y & Z axes, negate Z
 def vertex_correction(vDataX, vDataY, vDataZ):
+    """Apply correction to vertex - swap Y & Z axes, negate Z."""
     return '{0:,.4f}'.format(vDataX) + ' ' + '{0:,.4f}'.format(vDataZ) + ' ' + '{0:,.4f}'.format(-vDataY) + ' '
 
-# Write XML file header and info
 def write_header_info(file):
+    """Write XML file header and info."""
     headerInfo = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"               + \
                  "<exporter version=\"0.5\">\n"                               + \
                  "  <info>\n"                                                 + \
@@ -28,8 +28,8 @@ def write_header_info(file):
                  "  </info>\n"
     file.write(headerInfo)
 
-# Write the mesh data for an object to XML file
 def writeMeshData(file, item):
+    """Write the mesh data for an object to XML file."""
     mesh = item.to_mesh(scene, True, 'PREVIEW') # create new mesh from item and apply modifiers
     file.write("    <mesh id=\"" + item.name + "_mesh\">\n")
 
@@ -65,8 +65,8 @@ def writeMeshData(file, item):
 
     file.write("\n    </mesh>\n")
 
-# Export the data to XML format
 def export():
+    """Export the data to XML format."""
     # OPEN FILE
     filename = bpy.data.filepath.rsplit(".", 1)[0]
     file     = open(filename + ".xml", 'w+')
