@@ -1,4 +1,4 @@
-Cub3r
+Cub<sup>3</sup>r
 =====
 
 3D cube puzzle game/solver using OpenGL
