@@ -16,44 +16,44 @@
  */
 class Cube {
  public:
- 	/**
- 	 * Constructor for Cube.
- 	 */
-	Cube();
+    /**
+     * Constructor for Cube.
+     */
+    Cube();
 
-	/**
- 	 * Destructor for Cube. Release resources.
- 	 */
-	~Cube();
+    /**
+     * Destructor for Cube. Release resources.
+     */
+    ~Cube();
 
-	/**
- 	 * Create the cube by importing the data from file.
- 	 */
-	void setupCube(GLuint shaderProgram);
+    /**
+     * Create the cube by importing the data from file.
+     */
+    void setupCube(GLuint shaderProgram);
 
-	/**
- 	 * Render every mesh in the cube.
- 	 */
-	void render(glm::mat4 viewProjectionMatrix);
+    /**
+     * Render every mesh in the cube.
+     */
+    void render(glm::mat4 viewProjectionMatrix);
 
-	void setRotation(GLfloat angle, glm::vec3 axis, GLfloat rate);
+    void setRotation(GLfloat angle, glm::vec3 axis, GLfloat rate);
 
-	void rotate();
+    void rotate();
 
-	void operations();
+    void operations();
 
  private:
- 	struct Cub3
- 	{
- 		std::vector<Model> models;
- 	};
+    struct Cub3
+    {
+        std::vector<Model> models;
+    };
 
- 	std::vector<Cub3> cubes;
+    std::vector<Cub3> cubes;
 
- 	GLfloat slerpRate;
- 	GLfloat currentSlerpVal;      // Current slerp value. If > 0, rotation in progress
- 	GLfloat currentRotationAngle;
- 	glm::vec3 currentRotationAxis;
+    GLfloat slerpRate;
+    GLfloat currentSlerpVal;      // Current slerp value. If > 0, rotation in progress
+    GLfloat currentRotationAngle;
+    glm::vec3 currentRotationAxis;
 };
 
 #endif // CUBE_H_
