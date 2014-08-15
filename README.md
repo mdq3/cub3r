@@ -6,7 +6,7 @@ Cub<sup>3</sup>r
 
 Compilation
 ===========
-g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lGL -lGLEW -lsfml-system -lsfml-window -lsfml-graphics -ltinyxml2 -o ../bin/cub3r
+g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lGL -lGLEW -lsfml-system -lsfml-window -ltinyxml2 -o ../bin/cub3r
 
 
 
@@ -16,7 +16,6 @@ Dependencies
 * GL Extension Wrangler (glew)
 * SFML
 * SFML window
-* SFML graphics
 * TinyXML-2
 
 
