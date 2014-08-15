@@ -12,12 +12,11 @@ g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.
 
 Dependencies
 ============
-OpenGL
-GL Extension Wrangler (glew)
-SFML
-SFML window
-SFML graphics
-TinyXML-2
+* OpenGL GL Extension Wrangler (glew)
+* SFML
+* SFML window
+* SFML graphics
+* TinyXML-2
 
 
 Project Directories
