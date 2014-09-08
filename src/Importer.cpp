@@ -64,11 +64,10 @@ void Importer::loadObject(tinyxml2::XMLNode* object)
     {
         tinyxml2::XMLNode* vertexPositions = mesh->FirstChild();
         tinyxml2::XMLNode* vertexNormals   = vertexPositions->NextSibling();
-        tinyxml2::XMLNode* faceIndices     = vertexNormals->NextSibling();
-        tinyxml2::XMLNode* color           = faceIndices->NextSibling();
+        tinyxml2::XMLNode* uvCoords        = vertexNormals->NextSibling();
+        tinyxml2::XMLNode* texture         = uvCoords->NextSibling();
 
         int vsSize = atoi(vertexPositions->ToElement()->Attribute("count", nullptr));
-        int isSize = atoi(faceIndices->ToElement()->Attribute("count", nullptr));
 
         std::string vsString = std::string(vertexPositions->ToElement()->GetText());
         std::vector<glm::vec3> vertices = toVertexArray(vsSize, vsString);
@@ -76,13 +75,12 @@ void Importer::loadObject(tinyxml2::XMLNode* object)
         std::string nsString = std::string(vertexNormals->ToElement()->GetText());
         std::vector<glm::vec3> normals = toVertexArray(vsSize, nsString);
 
-        std::string isString = std::string(faceIndices->ToElement()->GetText());
-        std::vector<GLuint> indices = toIndexArray(isSize, isString);
+        std::string uvString = std::string(uvCoords->ToElement()->GetText());
+        std::vector<glm::vec2> uvs = toUVArray(vsSize, uvString);
 
-        std::string colorString = std::string(color->ToElement()->GetText());
-        std::vector<glm::vec3> colors = toColorArray(vsSize, colorString);
+        std::string texturePath = std::string(texture->ToElement()->GetText());
 
-        Mesh m = {vertices, normals, indices, colors, vsSize, isSize};
+        Mesh m = {vertices, normals, uvs, texturePath, vsSize};
         o.meshes.push_back(m);
 
         mesh = mesh->NextSibling();
@@ -109,40 +107,21 @@ std::vector<glm::vec3> Importer::toVertexArray(int count, std::string dataString
     return vertices;
 }
 
-std::vector<GLuint> Importer::toIndexArray(int count, std::string dataString)
+// TODO :: refactor toUVArray and toVertexArray into same function
+std::vector<glm::vec2> Importer::toUVArray(int count, std::string dataString)
 {
-    std::istringstream indexStream(dataString);
-    std::vector<GLuint> indices;
+    std::istringstream uvStream(dataString);
+    glm::vec2 uv;
+    std::vector<glm::vec2> uvs;
     for(auto i = 0; i < count; ++i)
-    {
-        GLuint index;
-        indexStream >> index;
-
-        indices.push_back(index);
-    }
-    return indices;
-}
-
-std::vector<glm::vec3> Importer::toColorArray(int count, std::string dataString)
-{
-    std::istringstream colorStream(dataString);
-    glm::vec3 color;
-    std::vector<glm::vec3> colors;
-    for(auto i = 0; i < 3; ++i)
     {
         float v1;
         float v2;
-        float v3;
 
-        colorStream >> v1;
-        colorStream >> v2;
-        colorStream >> v3;
+        uvStream >> v1;
+        uvStream >> v2;
 
-        color = glm::vec3(v1, v2, v3);
+        uvs.push_back(glm::vec2(v1, v2));
     }
-    for(auto i = 0; i < count; ++i)
-    {
-        colors.push_back(color);
-    }
-    return colors;
+    return uvs;
 }

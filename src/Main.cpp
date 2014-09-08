@@ -36,7 +36,7 @@ void Main::init()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    //glEnable(GL_TEXTURE2D);
+    glEnable(GL_TEXTURE_2D);
     //glPolygonMode(GL_FRONT, GL_LINE); // Wireframe mode
 
     initModels();
@@ -44,8 +44,8 @@ void Main::init()
 
 void Main::initModels()
 {
-    const char* vert = "../resources/shaders/shader.vert";
-    const char* frag = "../resources/shaders/shader.frag";
+    const char* vert = "resources/shaders/shader.vert";
+    const char* frag = "resources/shaders/shader.frag";
     GLuint shaderProgram = createShaderProgram(vert, frag);
 
     glUseProgram(shaderProgram);
@@ -70,8 +70,8 @@ void Main::renderScene()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnableVertexAttribArray(0); // Vertex position attribute
-    glEnableVertexAttribArray(1); // Vertex color attribute
-    glEnableVertexAttribArray(2); // Vertex normal attribute
+    glEnableVertexAttribArray(1); // Vertex normal attribute
+    glEnableVertexAttribArray(2); // Vertex UV coordinate attribute
 
     updateLightsAndCamera();
 
@@ -178,7 +178,7 @@ GLuint Main::createShaderProgram(const char* vertShaderPath, const char* fragSha
     return shaderProgram;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
     Main program(1200, 1000);
     //std::cout << glGetString(GL_VERSION) << '\n';

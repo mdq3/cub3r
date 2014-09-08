@@ -17,13 +17,11 @@ class Importer {
  public:
     struct Mesh
     {
-        std::vector<glm::vec3> vs; // Vertices
-        std::vector<glm::vec3> ns; // Normals
-        std::vector<GLuint>    is; // Indices
-        std::vector<glm::vec3> cs; // Colors
-
-        int vsSize; // Number of vertices in mesh
-        int isSize; // Number of face indices in mesh
+        std::vector<glm::vec3> vs;  // Vertices
+        std::vector<glm::vec3> ns;  // Normals
+        std::vector<glm::vec2> uvs; // UV coords
+        std::string texturePath;    // Path to texture image
+        int vsSize;                 // Number of vertices in mesh
     };
 
     struct Object
@@ -39,7 +37,6 @@ class Importer {
 
  private:
     tinyxml2::XMLDocument doc;
-
     std::vector<Object> objects;
 
     void loadXML(std::string fileName);
@@ -50,9 +47,7 @@ class Importer {
 
     std::vector<glm::vec3> toVertexArray(int count, std::string dataString);
 
-    std::vector<GLuint> toIndexArray(int count, std::string dataString);
-
-    std::vector<glm::vec3> toColorArray(int count, std::string dataString);
+    std::vector<glm::vec2> toUVArray(int count, std::string dataString);
 };
 
 #endif // IMPORTER_H_

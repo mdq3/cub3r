@@ -1,4 +1,4 @@
-cub3r
+Cub<sup>3</sup>r
 =====
 
 3D cube puzzle game/solver using OpenGL
@@ -6,18 +6,17 @@ cub3r
 
 Compilation
 ===========
-g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lGL -lGLEW -lsfml-system -lsfml-window -lsfml-graphics -ltinyxml2 -o ../bin/cub3r
+g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lGL -lGLEW -lsfml-system -lsfml-window -ltinyxml2 -o ../bin/cub3r
 
 
 
 Dependencies
 ============
-OpenGL
-GL Extension Wrangler (glew)
-SFML
-SFML window
-SFML graphics
-TinyXML-2
+* OpenGL 
+* GL Extension Wrangler (glew)
+* SFML
+* SFML window
+* TinyXML-2
 
 
 Project Directories
@@ -30,3 +29,6 @@ Project Directories
         /scripts  - scripts used to generate resources
         /shaders  - GLSL shaders
         /textures - Textures used in UV mapping
+
+
+<div align="center"><a href="https://github.com/mdq3/cub3r"><img src="https://i.imgur.com/mKpFvN2.png?1" alt="Cub3r" /></a></div>

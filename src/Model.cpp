@@ -3,15 +3,17 @@
 #include <fstream>
 #include <math.h>
 
+#include <SFML/Graphics.hpp>
+
 #include "../include/Model.hpp"
 
 
-Model::Model(std::vector<glm::vec3>& vertices, std::vector<glm::vec3>& normals, std::vector<GLuint>& indices,
-             std::vector<glm::vec3> colors, GLuint iCount, GLuint shader, bool dynamicDraw) :
-indexCount{iCount},
+Model::Model(std::vector<glm::vec3>& vertices, std::vector<glm::vec3>& normals, std::vector<glm::vec2>& uvs,
+             std::string texturePath,GLuint vCount, GLuint shader, bool dynamicDraw) :
+shaderProgram{shader},
+vertexCount{vCount},
 materialShininess{50.0f},
-materialSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f)),
-shaderProgram{shader}
+materialSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f))
 {
     GLenum usage = GL_STATIC_DRAW;
     if(dynamicDraw)
@@ -20,9 +22,9 @@ shaderProgram{shader}
     }
 
     createVBO(VBOposition, vertices, usage);
-    createVBO(VBOcolor, colors, usage);
     createVBO(VBOnormal, normals, usage);
-    createIBO(indices, usage);
+    createUVBuffer(VBOuv, uvs, usage);
+    createTexture(texturePath);
 }
 
 Model::~Model()
@@ -78,19 +80,22 @@ void Model::render(glm::mat4 viewProjectionMatrix)
     GLint specularColor = glGetUniformLocation(shaderProgram, "materialSpecularColor");
     glUniform3fv(specularColor, 1, &materialSpecularColor[0]);
 
+    //GLuint textureID  = glGetUniformLocation(shaderProgram, "sampler");
+    //glActiveTexture(GL_TEXTURE0);
+    //glUniform1i(textureID, 0);
+
     // Vertex buffer processing
     glBindBuffer(GL_ARRAY_BUFFER, VBOposition);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBOcolor);
+    glBindBuffer(GL_ARRAY_BUFFER, VBOnormal);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBOnormal);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindBuffer(GL_ARRAY_BUFFER, VBOuv);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-
-    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 }
 
 void Model::createVBO(GLuint& VBO, std::vector<glm::vec3> data, GLenum usage)
@@ -100,11 +105,27 @@ void Model::createVBO(GLuint& VBO, std::vector<glm::vec3> data, GLenum usage)
     glBufferData(GL_ARRAY_BUFFER, data.size()*sizeof(glm::vec3), &data[0], usage);
 }
 
-void Model::createIBO(std::vector<GLuint> data, GLenum usage)
+void Model::createUVBuffer(GLuint& VBOuv, std::vector<glm::vec2> data, GLenum usage)
 {
-    glGenBuffers(1, &IBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size()*sizeof(GLuint), &data[0], usage);
+    glGenBuffers(1, &VBOuv);
+    glBindBuffer(GL_ARRAY_BUFFER, VBOuv);
+    glBufferData(GL_ARRAY_BUFFER, data.size()*sizeof(glm::vec2), &data[0], usage);
+}
+
+void Model::createTexture(std::string filePath)
+{
+    sf::Image image;
+    if (!image.loadFromFile(filePath))
+    {
+        std::cout << "Error: could not load texture " << filePath;
+    }
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getSize().x, image.getSize().y,
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
 void Model::generateVertexNormals(std::vector<glm::vec3> vertices, std::vector<GLuint> indices, GLenum usage)

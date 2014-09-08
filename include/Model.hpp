@@ -24,8 +24,8 @@ class Model {
     /**
      * Constructor for Model.
      */
-    Model(std::vector<glm::vec3>& vertices, std::vector<glm::vec3>& normals, std::vector<GLuint>& indices,
-          std::vector<glm::vec3> colors, GLuint iCount, GLuint shader, bool dynamicDraw);
+    Model(std::vector<glm::vec3>& vertices, std::vector<glm::vec3>& normals, std::vector<glm::vec2>& uvs,
+          std::string texturePath, GLuint vCount, GLuint shader, bool dynamicDraw);
 
     /**
      * Destructor for Model. Release resources.
@@ -51,17 +51,16 @@ class Model {
 
  private:
     GLuint VBOposition;      // Vertex Buffer Object for vertex positions
-    GLuint VBOcolor;         // Vertex Buffer Object for vertex colors
-    GLuint IBO;              // Index Buffer Object for this model
     GLuint VBOnormal;        // The vertex normals for this model
+    GLuint VBOuv;            // The UV coordinates for this model's texture
+    GLuint texture;          // This model's texture
+    GLuint shaderProgram;    // This model's shader program
 
-    GLuint indexCount;       // The number of vertex indices in this model
+    GLuint vertexCount;      // The number of vertices in this model
 
     // Material Properties
     GLfloat materialShininess;
     glm::vec3 materialSpecularColor;
-
-    GLuint shaderProgram;             // This model's shader program
 
     glm::mat4 modelMatrix;            // The complete model transform matrix
     glm::mat4 modelScaleMatrix;       // The model's scale matrix
@@ -75,6 +74,10 @@ class Model {
     void createVBO(GLuint& VBO, std::vector<glm::vec3> data, GLenum usage);
 
     void createIBO(std::vector<GLuint> data, GLenum usage);
+
+    void createUVBuffer(GLuint& VBOuv, std::vector<glm::vec2> data, GLenum usage);
+
+    void createTexture(std::string filePath);
 
     void generateVertexNormals(std::vector<glm::vec3> vertices, std::vector<GLuint> indices, GLenum usage);
 

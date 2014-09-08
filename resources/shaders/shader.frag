@@ -1,6 +1,5 @@
 #version 330
 
-
 uniform struct Light
 {
 	vec3 position;
@@ -9,6 +8,8 @@ uniform struct Light
 	float ambientCoefficient;
 } light;
 
+uniform sampler2D sampler;
+
 uniform float materialShininess;
 uniform vec3  materialSpecularColor;
 
@@ -16,8 +17,8 @@ uniform mat4 modelTransformMatrix;
 uniform vec3 cameraPosition;
 
 in vec3 fragVert;
-in vec3 fragColor;
 in vec3 fragNormal;
+in vec2 fragUV;
 
 out vec4 color;
 
@@ -29,7 +30,7 @@ void main()
 
 	// Surface attributes
 	vec3 surfacePosition = vec3(modelTransformMatrix * vec4(fragVert, 1));
-	vec4 surfaceColor    = vec4(fragColor, 1.0);
+	vec4 surfaceColor    = texture2D(sampler, fragUV);
 	vec3 surfaceToLight  = normalize(light.position - surfacePosition);
 	vec3 surfaceToCamera = normalize(cameraPosition - surfacePosition);
 
@@ -58,8 +59,9 @@ void main()
 
 	// Linear color
 	vec3 linearColor = ambient + attenuation * (diffuse + specular);
+	color = vec4(linearColor, 1.0);
 
 	// Final color (with gamma correction)
-	vec3 gamma = vec3(1.0 / 2.2);
-	color      = vec4(pow(linearColor, gamma), surfaceColor.a);
+	//vec3 gamma = vec3(1.0 / 2.2);
+	//color      = vec4(pow(linearColor, gamma), 1.0);
 }

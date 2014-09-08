@@ -17,7 +17,7 @@ Cube::~Cube()
 
 void Cube::setupCube(GLuint shaderProgram)
 {
-    Importer importer("../resources/models/cub3.xml");
+    Importer importer("resources/models/cub3.xml");
 
     std::vector<Importer::Object> objects = importer.getObject();
     for(Importer::Object& object : objects)
@@ -28,11 +28,12 @@ void Cube::setupCube(GLuint shaderProgram)
         {
             std::vector<glm::vec3> vs = mesh.vs;
             std::vector<glm::vec3> ns = mesh.ns;
-            std::vector<GLuint> is    = mesh.is;
-            std::vector<glm::vec3> cs = mesh.cs;
-            GLuint indexCount         = mesh.isSize;
+            std::vector<glm::vec2> uv = mesh.uvs;
+            std::string texture       = mesh.texturePath;
 
-            Model model(vs, ns, is, cs, indexCount, shaderProgram, true);
+            GLuint vertexCount = mesh.vsSize;
+
+            Model model(vs, ns, uv, texture, vertexCount, shaderProgram, true);
             cube.models.push_back(model);
         }
         cubes.push_back(cube);
