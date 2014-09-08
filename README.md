@@ -6,6 +6,9 @@ Cub<sup>3</sup>r
 
 Compilation
 ===========
+
+Use make or manually: 
+
 g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lGL -lGLEW -lsfml-system -lsfml-window -lsfml-graphics -ltinyxml2 -o ../bin/cub3r
 
 
