@@ -17,7 +17,7 @@ Cube::~Cube()
 
 void Cube::setupCube(GLuint shaderProgram)
 {
-    Importer importer("resources/models/cub3.xml");
+    Importer importer("resources/models/cub3.q3d");
 
     std::vector<Importer::Object> objects = importer.getObject();
     for(Importer::Object& object : objects)

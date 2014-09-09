@@ -1,9 +1,8 @@
 # Export Blender models to XML format for use with OpenGL.
-# Assumes one material per mesh (OpenGL colors vertices rather than faces as in Blender)
-# If a model uses more than one material, split into meshes and make child of parent mesh.
-# Currently only handles one level of parenting.
+# Assumes one texture per object
 
 # TODO: Export bone matrices, animation data (armature deforms & shape keys)
+#       Convert to Blender plugin for easier use
 
 import bpy
 import time
@@ -20,7 +19,7 @@ def vertex_correction(vDataX, vDataY, vDataZ):
 # Write XML file header and info
 def write_header_info(file):
     headerInfo = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"               + \
-                 "<exporter version=\"0.7\">\n"                               + \
+                 "<q3d_exporter version=\"0.7\">\n"                               + \
                  "  <info>\n"                                                 + \
                  "    <author></author>\n"                                    + \
                  "    <created>" + time.strftime("%Y-%m-%d") + "</created>\n" + \
@@ -71,7 +70,7 @@ def writeMeshData(file, item):
 def export():
     # OPEN FILE
     filename = bpy.data.filepath.rsplit(".", 1)[0]
-    file     = open(filename + ".xml", 'w+')
+    file     = open(filename + ".q3d", 'w+')
 
     write_header_info(file)
 
@@ -89,6 +88,6 @@ def export():
 
             file.write("  </object>\n")
 
-    file.write("</exporter>")
+    file.write("</q3d_exporter>")
 
 export()
