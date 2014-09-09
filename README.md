@@ -16,6 +16,7 @@ Dependencies
 ============
 * OpenGL 
 * GL Extension Wrangler (glew)
+* OpenGL Mathematics (GLM)
 * SFML
 * SFML window
 * SFML graphics
