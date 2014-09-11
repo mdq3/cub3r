@@ -19,7 +19,7 @@ def vertex_correction(vDataX, vDataY, vDataZ):
 # Write XML file header and info
 def write_header_info(file):
     headerInfo = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"               + \
-                 "<q3d_exporter version=\"0.7\">\n"                               + \
+                 "<q3d version=\"0.7\">\n"                               + \
                  "  <info>\n"                                                 + \
                  "    <author></author>\n"                                    + \
                  "    <created>" + time.strftime("%Y-%m-%d") + "</created>\n" + \
@@ -88,6 +88,6 @@ def export():
 
             file.write("  </object>\n")
 
-    file.write("</q3d_exporter>")
+    file.write("</q3d>")
 
 export()

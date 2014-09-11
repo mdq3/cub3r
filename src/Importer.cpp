@@ -9,7 +9,7 @@
 #include "../include/Importer.hpp"
 
 
-#define DOCTYPE "q3d_exporter"
+#define DOCTYPE "q3d"
 
 Importer::Importer(std::string fileName)
 {

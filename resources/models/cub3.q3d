@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<q3d_exporter version="0.7">
+<q3d version="0.7">
   <info>
     <author></author>
-    <created>2014-09-09</created>
+    <created>2014-09-11</created>
   </info>
   <object id="corner_back_bottom_left">
     <mesh id="corner_back_bottom_left_mesh">
@@ -212,4 +212,4 @@
       <texture_image id="middle_top_texture">resources/textures/middle_top.png</texture_image>
     </mesh>
   </object>
-</q3d_exporter>
+</q3d>
