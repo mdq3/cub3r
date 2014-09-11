@@ -14,7 +14,7 @@ g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.
 
 Dependencies
 ============
-* OpenGL (3.2)
+* OpenGL (at least 3.2)
 * GL Extension Wrangler (glew)
 * OpenGL Mathematics (GLM)
 * SFML
