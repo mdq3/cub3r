@@ -9,7 +9,7 @@
 #include "../include/Importer.hpp"
 
 
-#define DOCTYPE "q3d"
+#define DOCTYPE "q3d" // The 3D geometry file format
 
 Importer::Importer(std::string fileName)
 {
@@ -111,7 +111,6 @@ std::vector<glm::vec3> Importer::toVertexArray(int count, std::string dataString
 std::vector<glm::vec2> Importer::toUVArray(int count, std::string dataString)
 {
     std::istringstream uvStream(dataString);
-    glm::vec2 uv;
     std::vector<glm::vec2> uvs;
     for(auto i = 0; i < count; ++i)
     {
