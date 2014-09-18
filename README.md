@@ -35,4 +35,4 @@ Project Directories
         /textures - Textures used in UV mapping
 
 
-<div align="center"><a href="https://github.com/mdq3/cub3r"><img src="https://i.imgur.com/mKpFvN2.png?1" alt="Cub3r" /></a></div>
+<div align="center"><a href="https://github.com/mdq3/cub3r"><img src="https://i.imgur.com/psNMmPN.png?1" alt="Cub3r" /></a></div>
