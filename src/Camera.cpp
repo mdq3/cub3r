@@ -10,11 +10,17 @@
 
 
 Camera::Camera(int WindowWidth, int WindowHeight) :
-eyePos(glm::vec3(0.0f, 0.0f, 10.0f)),
-center(glm::vec3(0.0f, 0.0f, 0.0f)),
+//eyePos(glm::vec3(0.0f, 0.0f, 10.0f)),
+//center(glm::vec3(0.0f, 0.0f, 0.0f)),
+//up(glm::vec3(0.0f, 1.0f, 0.0f)),
+//direction(glm::vec3(0.0f, 0.0f, -1.0f)),
+//sideways(glm::vec3(-1.0f, 0.0f, 0.0f)),
+
+eyePos(glm::vec3(8.96f, 7.22f, 9.77f)),
+center(glm::vec3(8.33f, 6.73f, 9.16f)),
 up(glm::vec3(0.0f, 1.0f, 0.0f)),
-direction(glm::vec3(0.0f, 0.0f, -1.0f)),
-sideways(glm::vec3(-1.0f, 0.0f, 0.0f)),
+direction(glm::vec3(-0.63f, -0.49f, -0.61f)),
+sideways(glm::vec3(-0.70f, 0.00f, 0.72f)),
 currentSpeedX{0.0f}, currentSpeedY{0.0f}, currentSpeedZ{0.0f}
 {
     setProjectionPerspective(45.0f, (GLfloat)WindowWidth / (GLfloat)WindowHeight, 0.1f, 100.0f);

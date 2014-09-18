@@ -22,7 +22,7 @@ Importer::~Importer()
     // Release resources
 }
 
-std::vector<Importer::Object> Importer::getObject()
+std::vector<Importer::Mesh> Importer::getObjects()
 {
     return objects;
 }
@@ -58,7 +58,6 @@ void Importer::loadModel()
 
 void Importer::loadObject(tinyxml2::XMLNode* object)
 {
-    Object o;
     tinyxml2::XMLNode* mesh = object->FirstChild();
     while(mesh != nullptr)
     {
@@ -81,11 +80,10 @@ void Importer::loadObject(tinyxml2::XMLNode* object)
         std::string texturePath = std::string(texture->ToElement()->GetText());
 
         Mesh m = {vertices, normals, uvs, texturePath, vsSize};
-        o.meshes.push_back(m);
+        objects.push_back(m);
 
         mesh = mesh->NextSibling();
     }
-    objects.push_back(o);
 }
 
 std::vector<glm::vec3> Importer::toVertexArray(int count, std::string dataString)
@@ -107,7 +105,6 @@ std::vector<glm::vec3> Importer::toVertexArray(int count, std::string dataString
     return vertices;
 }
 
-// TODO :: refactor toUVArray and toVertexArray into same function
 std::vector<glm::vec2> Importer::toUVArray(int count, std::string dataString)
 {
     std::istringstream uvStream(dataString);

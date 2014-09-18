@@ -28,32 +28,34 @@ class Cube {
 
     /**
      * Create the cube by importing the data from file.
+     *
+     * @param shaderProgram The shader program to use for the Cube
      */
     void setupCube(GLuint shaderProgram);
 
     /**
      * Render every mesh in the cube.
+     *
+     * @param viewProjectionMatrix The VPM matrix rendering the cube
      */
     void render(glm::mat4 viewProjectionMatrix);
 
-    void setRotation(GLfloat angle, glm::vec3 axis, GLfloat rate);
-
-    void rotate();
-
+    /**
+     * Execute transformation operations for current render cycle.
+     */
     void operations();
 
+    void rotateFront(GLfloat angle);
+    void rotateBack(GLfloat angle);
+    void rotateLeft(GLfloat angle);
+    void rotateRight(GLfloat angle);
+    void rotateTop(GLfloat angle);
+    void rotateBottom(GLfloat angle);
+
  private:
-    struct Cub3
-    {
-        std::vector<Model> models;
-    };
+    std::vector<Model> cubes;
 
-    std::vector<Cub3> cubes;
-
-    GLfloat slerpRate;
-    GLfloat currentSlerpVal;      // Current slerp value. If > 0, rotation in progress
-    GLfloat currentRotationAngle;
-    glm::vec3 currentRotationAxis;
+    bool rotate(GLfloat angle, glm::vec3 axis, std::vector<int> faces);
 };
 
 #endif // CUBE_H_

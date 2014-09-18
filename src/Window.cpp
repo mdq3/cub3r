@@ -145,18 +145,87 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
         break;
     }
 
-    case sf::Keyboard::P:
+    case sf::Keyboard::I:
     {
-        GLfloat angle;
+        GLfloat angle = -90.0f;
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            angle = 90.0f;  // Counter-clockwise rotation
+            cube.rotateTop(angle);
         }
         else
         {
-            angle = -90.0f; // Clockwise rotation
+            cube.rotateTop(angle);
         }
-        cube.setRotation(angle, glm::vec3(0.0f, 1.0f, 0.0f), 0.05f);
+        break;
+    }
+
+    case sf::Keyboard::M:
+    {
+        GLfloat angle = 90.0f;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+            cube.rotateBottom(angle);
+        }
+        else
+        {
+            cube.rotateBottom(angle);
+        }
+        break;
+    }
+
+    case sf::Keyboard::K:
+    {
+        GLfloat angle = -90.0f;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+            cube.rotateFront(angle);
+        }
+        else
+        {
+            cube.rotateFront(angle);
+        }
+        break;
+    }
+
+    case sf::Keyboard::O:
+    {
+        GLfloat angle = 90.0f;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+            cube.rotateBack(angle);
+        }
+        else
+        {
+            cube.rotateBack(angle);
+        }
+        break;
+    }
+
+    case sf::Keyboard::J:
+    {
+        GLfloat angle = 90.0f;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+            cube.rotateLeft(angle);
+        }
+        else
+        {
+            cube.rotateLeft(angle);
+        }
+        break;
+    }
+
+    case sf::Keyboard::L:
+    {
+        GLfloat angle = -90.0f;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+            cube.rotateRight(angle);
+        }
+        else
+        {
+            cube.rotateRight(angle);
+        }
         break;
     }
 

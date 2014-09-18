@@ -7,7 +7,6 @@
 #include <string>
 
 #include <GL/glew.h>
-
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -40,14 +39,18 @@ class Model {
 
     void worldRotate(GLfloat angle, glm::vec3 axis, GLfloat slerp);
 
+    void render(glm::mat4 viewProjectionMatrix);
+
+    void operations();
+
     /**
-     * Get this model's shader program
+     * Get this model's shader program.
      *
      * @return the GLuint for the shader program
      */
     GLuint getShaderProgram();
 
-    void render(glm::mat4 viewProjectionMatrix);
+    bool isRotating();
 
  private:
     GLuint VBOposition;      // Vertex Buffer Object for vertex positions
@@ -55,7 +58,6 @@ class Model {
     GLuint VBOuv;            // The UV coordinates for this model's texture
     GLuint texture;          // This model's texture
     GLuint shaderProgram;    // This model's shader program
-
     GLuint vertexCount;      // The number of vertices in this model
 
     // Material Properties
@@ -70,10 +72,12 @@ class Model {
 
     glm::mat4 currentModelWorldRotateMatrix;
 
+    GLfloat slerpRate;
+    GLfloat currentSlerpVal; // Current slerp value. If > 0, rotation in progress, if >= 1, rotation finished
+    GLfloat currentRotationAngle;
+    glm::vec3 currentRotationAxis;
 
     void createVBO(GLuint& VBO, std::vector<glm::vec3> data, GLenum usage);
-
-    void createIBO(std::vector<GLuint> data, GLenum usage);
 
     void createUVBuffer(GLuint& VBOuv, std::vector<glm::vec2> data, GLenum usage);
 
@@ -82,6 +86,8 @@ class Model {
     void generateVertexNormals(std::vector<glm::vec3> vertices, std::vector<GLuint> indices, GLenum usage);
 
     void rotate(glm::mat4& rotateMatrix, GLfloat angle, glm::vec3 axis, GLfloat slerp);
+
+    void doRotation();
 };
 
 #endif // MODEL_H_

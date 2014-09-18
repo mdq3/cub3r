@@ -33,6 +33,8 @@ class Camera {
     void setProjectionPerspective(GLfloat fov, GLfloat aspectRatio, GLfloat near, GLfloat far);
     void setProjectionOrthographic();
 
+    void printInfo();
+
  private:
 
     // LookAt vectors
@@ -48,8 +50,6 @@ class Camera {
     GLfloat currentSpeedX;
     GLfloat currentSpeedY;
     GLfloat currentSpeedZ;
-
-    void printInfo();
 };
 
 #endif // CAMERA_H_

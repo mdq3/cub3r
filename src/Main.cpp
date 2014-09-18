@@ -12,7 +12,7 @@ window{windowWidth, windowHeight}
     light.position = glm::vec3(0.0f, 0.0f, 5.0f);
     light.rgb = glm::vec3(1.0f, 1.0f, 1.0f);
     light.attenuation = 0.0f;
-    light.ambientCoefficient = 0.1f;
+    light.ambientCoefficient = 0.5f;
 
     init();
     mainLoop();

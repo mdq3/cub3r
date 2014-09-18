@@ -23,20 +23,15 @@ class Importer {
         int vsSize;                 // Number of vertices in mesh
     };
 
-    struct Object
-    {
-        std::vector<Mesh> meshes;
-    };
-
     Importer(std::string fileName);
 
     ~Importer();
 
-    std::vector<Object> getObject();
+    std::vector<Mesh> getObjects();
 
  private:
     tinyxml2::XMLDocument doc;
-    std::vector<Object> objects;
+    std::vector<Mesh> objects;
 
     void loadXML(std::string fileName);
 

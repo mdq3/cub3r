@@ -52,11 +52,6 @@ void Model::worldRotate(GLfloat angle, glm::vec3 axis, GLfloat slerp)
     rotate(modelWorldRotateMatrix, angle, axis, slerp);
 }
 
-GLuint Model::getShaderProgram()
-{
-    return shaderProgram;
-}
-
 void Model::render(glm::mat4 viewProjectionMatrix)
 {
     modelMatrix = modelScaleMatrix *
@@ -80,10 +75,6 @@ void Model::render(glm::mat4 viewProjectionMatrix)
     GLint specularColor = glGetUniformLocation(shaderProgram, "materialSpecularColor");
     glUniform3fv(specularColor, 1, &materialSpecularColor[0]);
 
-    //GLuint textureID  = glGetUniformLocation(shaderProgram, "sampler");
-    //glActiveTexture(GL_TEXTURE0);
-    //glUniform1i(textureID, 0);
-
     // Vertex buffer processing
     glBindBuffer(GL_ARRAY_BUFFER, VBOposition);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -96,6 +87,14 @@ void Model::render(glm::mat4 viewProjectionMatrix)
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+}
+
+void Model::operations()
+{
+    if(currentSlerpVal > 0.0f)
+    {
+        doRotation();
+    }
 }
 
 void Model::createVBO(GLuint& VBO, std::vector<glm::vec3> data, GLenum usage)
@@ -151,13 +150,47 @@ void Model::generateVertexNormals(std::vector<glm::vec3> vertices, std::vector<G
 
 void Model::rotate(glm::mat4& rotateMatrix, GLfloat angle, glm::vec3 axis, GLfloat slerp)
 {
+    if(currentSlerpVal == 0.0f)
+    {
+        currentRotationAngle = angle;
+        currentRotationAxis = axis;
+        slerpRate = slerp;
+        currentSlerpVal += slerpRate;
+    }
+
     angle *= M_PI / 180.0f; // Convert degrees into radians
-    glm::quat target = glm::quat_cast(currentModelWorldRotateMatrix) * glm::angleAxis(angle, axis);
+    glm::quat target = glm::normalize(glm::angleAxis(angle, axis)) * glm::quat_cast(currentModelWorldRotateMatrix);
     glm::quat mix = glm::mix(glm::quat_cast(currentModelWorldRotateMatrix), target, slerp);
     rotateMatrix = glm::mat4_cast(mix);
 
-    if(slerp == 1.0f)
+    if(currentSlerpVal == 1.0f)
     {
-        currentModelWorldRotateMatrix = modelWorldRotateMatrix;
+        currentModelWorldRotateMatrix = rotateMatrix;
+        //currentModelWorldRotateMatrix = glm::rotate(currentModelWorldRotateMatrix, angle, axis);
     }
+}
+
+void Model::doRotation()
+{
+    localRotate(currentRotationAngle, currentRotationAxis, currentSlerpVal);
+    currentSlerpVal += slerpRate;
+    currentSlerpVal = floor(currentSlerpVal * pow(10.0f, 2) + 0.5f) / pow(10.0f, 2); // Correct float arith errors
+    if(currentSlerpVal > 1.0f)
+    {
+        currentSlerpVal = 0.0f;
+    }
+}
+
+GLuint Model::getShaderProgram()
+{
+    return shaderProgram;
+}
+
+bool Model::isRotating()
+{
+    if(currentSlerpVal > 0.0f)
+    {
+        return true;
+    }
+    return false;
 }
