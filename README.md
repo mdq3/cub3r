@@ -4,6 +4,20 @@ Cub<sup>3</sup>r
 3D cube puzzle game/solver using OpenGL
 
 
+Usage
+=====
+
+Keyboard:  
+**Esc** - quit program  
+**I** - Rotate top face  
+**M** - Rotate bottom face  
+**J** - Rotate left face  
+**L** - Rotateright face  
+**K** - Rotate front face  
+**O** - Rotate back face  
+**(hold) LShift** - Rotate anticlockwise  
+
+
 Compilation
 ===========
 
