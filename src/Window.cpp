@@ -145,86 +145,80 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
         break;
     }
 
-    case sf::Keyboard::I:
-    {
-        GLfloat angle = -90.0f;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-        {
-            cube.rotateTop(angle);
-        }
-        else
-        {
-            cube.rotateTop(angle);
-        }
-        break;
-    }
-
-    case sf::Keyboard::M:
-    {
-        GLfloat angle = 90.0f;
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-        {
-            cube.rotateBottom(angle);
-        }
-        else
-        {
-            cube.rotateBottom(angle);
-        }
-        break;
-    }
-
     case sf::Keyboard::K:
     {
-        GLfloat angle = -90.0f;
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateFront(angle);
+            cube.rotateFrontAnticlockwise();
         }
         else
         {
-            cube.rotateFront(angle);
+            cube.rotateFrontClockwise();
         }
         break;
     }
 
     case sf::Keyboard::O:
     {
-        GLfloat angle = 90.0f;
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateBack(angle);
+            cube.rotateBackAnticlockwise();
         }
         else
         {
-            cube.rotateBack(angle);
+            cube.rotateBackClockwise();
         }
         break;
     }
 
     case sf::Keyboard::J:
     {
-        GLfloat angle = 90.0f;
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateLeft(angle);
+            cube.rotateLeftAnticlockwise();
         }
         else
         {
-            cube.rotateLeft(angle);
+            cube.rotateLeftClockwise();
         }
         break;
     }
 
     case sf::Keyboard::L:
     {
-        GLfloat angle = -90.0f;
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateRight(angle);
+            cube.rotateRightAnticlockwise();
         }
         else
         {
-            cube.rotateRight(angle);
+            cube.rotateRightClockwise();
+        }
+        break;
+    }
+
+    case sf::Keyboard::I:
+    {
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+            cube.rotateTopAnticlockwise();
+        }
+        else
+        {
+            cube.rotateTopClockwise();
+        }
+        break;
+    }
+
+    case sf::Keyboard::M:
+    {
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+            cube.rotateBottomAnticlockwise();
+        }
+        else
+        {
+            cube.rotateBottomClockwise();
         }
         break;
     }

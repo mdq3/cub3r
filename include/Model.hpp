@@ -43,13 +43,6 @@ class Model {
 
     void operations();
 
-    /**
-     * Get this model's shader program.
-     *
-     * @return the GLuint for the shader program
-     */
-    GLuint getShaderProgram();
-
     bool isRotating();
 
  private:

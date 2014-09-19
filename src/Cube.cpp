@@ -49,115 +49,67 @@ void Cube::operations()
     }
 }
 
-void Cube::rotateFront(GLfloat angle)
+void Cube::rotateFrontClockwise()
 {
-    std::vector<int> faces = {2, 3, 6, 7, 9, 10, 11, 12, 22};
-    if(rotate(angle, glm::vec3(0.0f, 0.0f, 1.0f), faces))
-    {
-        Model temp = cubes[7];
-        cubes[7] = cubes[6];
-        cubes[6] = cubes[2];
-        cubes[2] = cubes[3];
-        cubes[3] = temp;
-        temp = cubes[12];
-        cubes[12] = cubes[10];
-        cubes[10] = cubes[9];
-        cubes[9] = cubes[11];
-        cubes[11] = temp;
-    }
+    rotate(-90.0f, glm::vec3(0.0f, 0.0f, 1.0f), frontFace, true);
 }
 
-void Cube::rotateBack(GLfloat angle)
+void Cube::rotateBackClockwise()
 {
-    std::vector<int> faces = {0, 1, 4, 5, 8, 13, 15, 17, 20};
-    if(rotate(angle, glm::vec3(0.0f, 0.0f,1.0f), faces))
-    {
-        Model temp = cubes[5];
-        cubes[5] = cubes[1];
-        cubes[1] = cubes[0];
-        cubes[0] = cubes[4];
-        cubes[4] = temp;
-        temp = cubes[17];
-        cubes[17] = cubes[15];
-        cubes[15] = cubes[8];
-        cubes[8] = cubes[13];
-        cubes[13] = temp;
-    }
+    rotate(90.0f, glm::vec3(0.0f, 0.0f, 1.0f), backFace, true);
 }
 
-void Cube::rotateLeft(GLfloat angle)
+void Cube::rotateLeftClockwise()
 {
-    std::vector<int> faces = {0, 2, 4, 6, 10, 13, 14, 18, 23};
-    if(rotate(angle, glm::vec3(1.0f, 0.0f, 0.0f), faces))
-    {
-        Model temp = cubes[6];
-        cubes[6] = cubes[4];
-        cubes[4] = cubes[0];
-        cubes[0] = cubes[2];
-        cubes[2] = temp;
-        temp = cubes[18];
-        cubes[18] = cubes[13];
-        cubes[13] = cubes[14];
-        cubes[14] = cubes[10];
-        cubes[10] = temp;
-    }
+    rotate(90.0f, glm::vec3(1.0f, 0.0f,0.0f), leftFace, true);
 }
 
-void Cube::rotateRight(GLfloat angle)
+void Cube::rotateRightClockwise()
 {
-    std::vector<int> faces = {1, 3, 5, 7, 11, 15, 16, 19, 24};
-    if(rotate(angle, glm::vec3(1.0f, 0.0f, 0.0f), faces))
-    {
-        Model temp = cubes[7];
-        cubes[7] = cubes[3];
-        cubes[3] = cubes[1];
-        cubes[1] = cubes[5];
-        cubes[5] = temp;
-        temp = cubes[19];
-        cubes[19] = cubes[11];
-        cubes[11] = cubes[16];
-        cubes[16] = cubes[15];
-        cubes[15] = temp;
-    }
+    rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f), rightFace, true);
 }
 
-void Cube::rotateTop(GLfloat angle)
+void Cube::rotateTopClockwise()
 {
-    std::vector<int> faces = {4, 5, 6, 7, 12, 17, 18, 19, 25};
-    if(rotate(angle, glm::vec3(0.0f, 1.0f, 0.0f), faces))
-    {
-        Model temp = cubes[7];
-        cubes[7] = cubes[5];
-        cubes[5] = cubes[4];
-        cubes[4] = cubes[6];
-        cubes[6] = temp;
-        temp = cubes[12];
-        cubes[12] = cubes[19];
-        cubes[19] = cubes[17];
-        cubes[17] = cubes[18];
-        cubes[18] = temp;
-    }
+    rotate(-90.0f, glm::vec3(0.0f, 1.0f, 0.0f), topFace, true);
 }
 
-void Cube::rotateBottom(GLfloat angle)
+void Cube::rotateBottomClockwise()
 {
-    std::vector<int> faces = {0, 1, 2, 3, 8, 9, 14, 16, 21};
-    if(rotate(angle, glm::vec3(0.0f, 1.0f, 0.0f), faces))
-    {
-        Model temp = cubes[3];
-        cubes[3] = cubes[2];
-        cubes[2] = cubes[0];
-        cubes[0] = cubes[1];
-        cubes[1] = temp;
-        temp = cubes[9];
-        cubes[9] = cubes[14];
-        cubes[14] = cubes[8];
-        cubes[8] = cubes[16];
-        cubes[16] = temp;
-    }
+    rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f), bottomFace, true);
 }
 
-bool Cube::rotate(GLfloat angle, glm::vec3 axis, std::vector<int> faces)
+void Cube::rotateFrontAnticlockwise()
+{
+    rotate(90.0f, glm::vec3(0.0f, 0.0f, 1.0f), frontFace, false);
+}
+
+void Cube::rotateBackAnticlockwise()
+{
+    rotate(-90.0f, glm::vec3(0.0f, 0.0f, 1.0f), backFace, false);
+}
+
+void Cube::rotateLeftAnticlockwise()
+{
+    rotate(-90.0f, glm::vec3(1.0f, 0.0f,0.0f), leftFace, false);
+}
+
+void Cube::rotateRightAnticlockwise()
+{
+    rotate(90.0f, glm::vec3(1.0f, 0.0f, 0.0f), rightFace, false);
+}
+
+void Cube::rotateTopAnticlockwise()
+{
+    rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f), topFace, false);
+}
+
+void Cube::rotateBottomAnticlockwise()
+{
+    rotate(-90.0f, glm::vec3(0.0f, 1.0f, 0.0f), bottomFace, false);
+}
+
+void Cube::rotate(GLfloat angle, glm::vec3 axis, std::vector<int> face, bool clockwise)
 {
     bool rotating = false;
     for(Model& cube : cubes)
@@ -170,11 +122,36 @@ bool Cube::rotate(GLfloat angle, glm::vec3 axis, std::vector<int> faces)
 
     if(!rotating)
     {
-        for(unsigned int i = 0; i < faces.size(); ++i)
+        for(unsigned int i = 0; i < face.size(); ++i)
         {
-            cubes[faces[i]].localRotate(angle, axis, 0.05f);
+            cubes[face[i]].localRotate(angle, axis, 0.05f);
         }
-        return true;
+
+        if(clockwise)
+        {
+            Model temp = cubes[face[0]];
+            cubes[face[0]] = cubes[face[3]];
+            cubes[face[3]] = cubes[face[2]];
+            cubes[face[2]] = cubes[face[1]];
+            cubes[face[1]] = temp;
+            temp = cubes[face[4]];
+            cubes[face[4]] = cubes[face[7]];
+            cubes[face[7]] = cubes[face[6]];
+            cubes[face[6]] = cubes[face[5]];
+            cubes[face[5]] = temp;
+        }
+        else
+        {
+            Model temp = cubes[face[0]];
+            cubes[face[0]] = cubes[face[1]];
+            cubes[face[1]] = cubes[face[2]];
+            cubes[face[2]] = cubes[face[3]];
+            cubes[face[3]] = temp;
+            temp = cubes[face[4]];
+            cubes[face[4]] = cubes[face[5]];
+            cubes[face[5]] = cubes[face[6]];
+            cubes[face[6]] = cubes[face[7]];
+            cubes[face[7]] = temp;
+        }
     }
-    return false;
 }

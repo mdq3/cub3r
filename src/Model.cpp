@@ -181,11 +181,6 @@ void Model::doRotation()
     }
 }
 
-GLuint Model::getShaderProgram()
-{
-    return shaderProgram;
-}
-
 bool Model::isRotating()
 {
     if(currentSlerpVal > 0.0f)
