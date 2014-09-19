@@ -1,9 +1,8 @@
 Cub<sup>3</sup>r
 =====
 
-3D cube puzzle game/solver using OpenGL
+3D cube puzzle game/solver using OpenGL  
 
-<div align="center"><a href="https://github.com/mdq3/cub3r"><img src="https://i.imgur.com/psNMmPN.png?1" alt="Cub3r" /></a></div>
 
 Usage
 =====
@@ -49,3 +48,5 @@ Project Directories
         /shaders  - GLSL shaders
         /textures - Textures used in UV mapping
 
+
+<div align="center"><a href="https://github.com/mdq3/cub3r"><img src="https://i.imgur.com/psNMmPN.png?1" alt="Cub3r" /></a></div>
