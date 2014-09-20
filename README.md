@@ -1,19 +1,31 @@
-Cub<sup>3</sup>r
-=====
-
-3D cube puzzle game/solver using OpenGL
+# Cub<sup>3</sup>r #
 
 
-Compilation
-===========
+3D cube puzzle game/solver using OpenGL  
+  
+  
+## Usage ##
+
+Keyboard:  
+**Esc** - quit program  
+**I** - Rotate top face  
+**M** - Rotate bottom face  
+**J** - Rotate left face  
+**L** - Rotateright face  
+**K** - Rotate front face  
+**O** - Rotate back face  
+**(hold) LShift** - Rotate anticlockwise  
+
+
+## Compilation ##
 
 Use make or manually: 
 
 g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lGL -lGLEW -lsfml-system -lsfml-window -lsfml-graphics -ltinyxml2 -o ../bin/cub3r
 
 
-Dependencies
-============
+## Dependencies ##
+
 * OpenGL (at least 3.3)
 * GL Extension Wrangler (glew)
 * OpenGL Mathematics (GLM)
@@ -23,8 +35,8 @@ Dependencies
 * TinyXML-2
 
 
-Project Directories
-===================
+## Project Directories ##
+
     /src          - all source code for project
     /include      - all header files for project
     /bin          - compiled binaries
