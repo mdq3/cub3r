@@ -28,10 +28,7 @@ cameraSpeed{0.1}
     lastMousePos = sf::Mouse::getPosition(window);
 }
 
-Window::~Window()
-{
-    // Release resources
-}
+Window::~Window() {}
 
 void Window::display()
 {

@@ -18,10 +18,7 @@ window{windowWidth, windowHeight}
     mainLoop();
 }
 
-Main::~Main()
-{
-    // Release resources
-}
+Main::~Main() {}
 
 void Main::init()
 {

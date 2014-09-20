@@ -27,10 +27,7 @@ materialSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f))
     createTexture(texturePath);
 }
 
-Model::~Model()
-{
-    // Release resources
-}
+Model::~Model() {}
 
 void Model::scale(glm::vec3 amount)
 {

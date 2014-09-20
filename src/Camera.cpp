@@ -26,10 +26,7 @@ currentSpeedX{0.0f}, currentSpeedY{0.0f}, currentSpeedZ{0.0f}
     setProjectionPerspective(45.0f, (GLfloat)WindowWidth / (GLfloat)WindowHeight, 0.1f, 100.0f);
 }
 
-Camera::~Camera()
-{
-    // Release resources
-}
+Camera::~Camera() {}
 
 glm::mat4 Camera::getViewMatrix()
 {

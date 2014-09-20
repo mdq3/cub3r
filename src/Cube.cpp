@@ -4,15 +4,9 @@
 
 #include "../include/Cube.hpp"
 
-Cube::Cube()
-{
+Cube::Cube() {}
 
-}
-
-Cube::~Cube()
-{
-    // Release resources
-}
+Cube::~Cube() {}
 
 void Cube::setupCube(GLuint shaderProgram)
 {

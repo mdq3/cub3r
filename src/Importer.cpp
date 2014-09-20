@@ -17,10 +17,7 @@ Importer::Importer(std::string fileName)
     loadModel();
 }
 
-Importer::~Importer()
-{
-    // Release resources
-}
+Importer::~Importer() {}
 
 std::vector<Importer::Mesh> Importer::getObjects()
 {
