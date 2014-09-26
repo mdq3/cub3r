@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include "../include/Window.hpp"
 
 Window::Window(int width, int height) :
@@ -21,6 +22,8 @@ scene{windowWidth, windowHeight}
     window.setMouseCursorVisible(false);
     sf::Mouse::setPosition(sf::Vector2<int>(windowWidth/2, windowHeight/2), window);
     lastMousePos = sf::Mouse::getPosition(window);
+
+    init();
 }
 
 Window::~Window() {}
@@ -33,6 +36,18 @@ void Window::renderScene()
 
 void Window::init()
 {
+    GLenum res = glewInit();
+    if (res != GLEW_OK) {
+        std::cout << "Error: " << glewGetErrorString(res) << '\n';
+        exit(1);
+    }
+
+    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE_2D);
+    //glPolygonMode(GL_FRONT, GL_LINE); // Wireframe mode
+
     scene.initModels();
 }
 

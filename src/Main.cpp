@@ -7,29 +7,10 @@
 Main::Main(int windowWidth, int windowHeight) :
 window{windowWidth, windowHeight}
 {
-    init();
     mainLoop();
 }
 
 Main::~Main() {}
-
-void Main::init()
-{
-    // Initialize Glew
-    GLenum res = glewInit();
-    if (res != GLEW_OK) {
-        std::cout << "Error: " << glewGetErrorString(res) << '\n';
-        exit(1);
-    }
-
-    glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_TEXTURE_2D);
-    //glPolygonMode(GL_FRONT, GL_LINE); // Wireframe mode
-
-    window.init();
-}
 
 void Main::mainLoop()
 {
