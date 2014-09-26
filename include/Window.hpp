@@ -1,16 +1,17 @@
+/**
+ * Setup SFML window, handle events and 3D camera.
+ *
+ * @author mdq3
+ */
 
 #ifndef WINDOW_H_
 #define WINDOW_H_
-
 
 #include <GL/glew.h>
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
 #include <glm/glm.hpp>
-
-#include "Camera.hpp"
-#include "Cube.hpp"
-
+#include "Scene.hpp"
 
 /**
  *
@@ -30,10 +31,11 @@ class Window {
      */
     ~Window();
 
-    /**
-     * Display the current frame. Swaps front and back buffers.
-     */
-    void display();
+    void renderScene();
+
+    void init();
+
+    glm::vec3 getCameraPosition();
 
     /**
      * Close the window.
@@ -48,27 +50,10 @@ class Window {
     bool isRunning();
 
     /**
-     * Get the projection view matrix for the camera.
-     *
-     * @return the projection view matrix
-     */
-    glm::mat4 getProjectionViewMatrix();
-
-    /**
-     * Get the camera position.
-     *
-     * @return the camera position as a 3-dimensional vector
-     */
-    glm::vec3 getCameraPosition();
-
-    /**
      * Handle window events.
      */
-    void handleEvents(Cube& cube);
+    void handleEvents();
 
-    /**
-     * Handle the camera operations.
-     */
     void handleCamera();
 
  private:
@@ -78,14 +63,13 @@ class Window {
     bool running;
     bool inFocus;
     sf::Vector2i lastMousePos;
-
     GLfloat mouseSensitivity;
-    Camera camera;
-    GLfloat cameraSpeed;
 
-    void handleKeyPressed(sf::Event event, Cube& cube);
+    Scene scene;
 
-    void handleKeyReleased(sf::Event event, Cube& cube);
+    void handleKeyPressed(sf::Event event);
+
+    void handleKeyReleased(sf::Event event);
 
     void handleMouse(sf::Event event);
 };

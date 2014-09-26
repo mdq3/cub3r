@@ -1,18 +1,21 @@
+/**
+ * 3D model. Holds geometry data and other attributes. Provides various transforms and sherical
+ * linear interpolation for rotation.
+ *
+ * @author mdq3
+ */
 
 #ifndef MODEL_H_
 #define MODEL_H_
 
-
 #include <vector>
 #include <string>
-
 #include <GL/glew.h>
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
 
 /**
  *

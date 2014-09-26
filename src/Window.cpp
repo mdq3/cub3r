@@ -1,15 +1,13 @@
 
 #include "../include/Window.hpp"
 
-
 Window::Window(int width, int height) :
 windowWidth{width},
 windowHeight{height},
 running{true},
 inFocus{true},
 mouseSensitivity{0.005},
-camera{windowWidth, windowHeight},
-cameraSpeed{0.1}
+scene{windowWidth, windowHeight}
 {
     sf::ContextSettings settings;
     settings.depthBits = 24;
@@ -19,20 +17,28 @@ cameraSpeed{0.1}
     settings.minorVersion = 3;
 
     window.create(sf::VideoMode(windowWidth, windowHeight), "Cub3r", sf::Style::Default, settings);
-
     window.setVerticalSyncEnabled(true);
     window.setMouseCursorVisible(false);
-    sf::Mouse::setPosition(sf::Vector2<int>(windowWidth/2, windowHeight/2), window);
-
     sf::Mouse::setPosition(sf::Vector2<int>(windowWidth/2, windowHeight/2), window);
     lastMousePos = sf::Mouse::getPosition(window);
 }
 
 Window::~Window() {}
 
-void Window::display()
+void Window::renderScene()
 {
-    window.display();
+    scene.render();
+    window.display(); // End current frame (swaps front and back buffers)
+}
+
+void Window::init()
+{
+    scene.initModels();
+}
+
+glm::vec3 Window::getCameraPosition()
+{
+    return scene.getCameraPosition();
 }
 
 void Window::close()
@@ -45,17 +51,7 @@ bool Window::isRunning()
     return running;
 }
 
-glm::mat4 Window::getProjectionViewMatrix()
-{
-    return camera.getProjectionViewMatrix();
-}
-
-glm::vec3 Window::getCameraPosition()
-{
-    return camera.getPosition();
-}
-
-void Window::handleEvents(Cube& cube)
+void Window::handleEvents()
 {
     sf::Event event;
     while (window.pollEvent(event))
@@ -82,11 +78,11 @@ void Window::handleEvents(Cube& cube)
             break;
 
         case sf::Event::KeyPressed:
-            handleKeyPressed(event, cube);
+            handleKeyPressed(event);
             break;
 
         case sf::Event::KeyReleased:
-            handleKeyReleased(event, cube);
+            handleKeyReleased(event);
             break;
 
         case sf::Event::MouseMoved:
@@ -103,12 +99,12 @@ void Window::handleEvents(Cube& cube)
 
 void Window::handleCamera()
 {
-    camera.move();
+    scene.handleCamera();
     sf::Mouse::setPosition(sf::Vector2<int>(windowWidth/2, windowHeight/2), window);
     lastMousePos = sf::Mouse::getPosition(window);
 }
 
-void Window::handleKeyPressed(sf::Event event, Cube& cube)
+void Window::handleKeyPressed(sf::Event event)
 {
     switch(event.key.code)
     {
@@ -120,25 +116,25 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
 
     case sf::Keyboard::W:
     {
-        camera.setSpeedZ(cameraSpeed);
+        scene.getCamera().setSpeedZ(scene.getCameraSpeed());
         break;
     }
 
     case sf::Keyboard::S:
     {
-        camera.setSpeedZ(-cameraSpeed);
+        scene.getCamera().setSpeedZ(-scene.getCameraSpeed());
         break;
     }
 
     case sf::Keyboard::A:
     {
-        camera.setSpeedX(cameraSpeed);
+        scene.getCamera().setSpeedX(scene.getCameraSpeed());
         break;
     }
 
     case sf::Keyboard::D:
     {
-        camera.setSpeedX(-cameraSpeed);
+        scene.getCamera().setSpeedX(-scene.getCameraSpeed());
         break;
     }
 
@@ -146,11 +142,11 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateFrontAnticlockwise();
+            scene.getCube().rotateFrontAnticlockwise();
         }
         else
         {
-            cube.rotateFrontClockwise();
+            scene.getCube().rotateFrontClockwise();
         }
         break;
     }
@@ -159,11 +155,11 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateBackAnticlockwise();
+            scene.getCube().rotateBackAnticlockwise();
         }
         else
         {
-            cube.rotateBackClockwise();
+            scene.getCube().rotateBackClockwise();
         }
         break;
     }
@@ -172,11 +168,11 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateLeftAnticlockwise();
+            scene.getCube().rotateLeftAnticlockwise();
         }
         else
         {
-            cube.rotateLeftClockwise();
+            scene.getCube().rotateLeftClockwise();
         }
         break;
     }
@@ -185,11 +181,11 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateRightAnticlockwise();
+            scene.getCube().rotateRightAnticlockwise();
         }
         else
         {
-            cube.rotateRightClockwise();
+            scene.getCube().rotateRightClockwise();
         }
         break;
     }
@@ -198,11 +194,11 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateTopAnticlockwise();
+            scene.getCube().rotateTopAnticlockwise();
         }
         else
         {
-            cube.rotateTopClockwise();
+            scene.getCube().rotateTopClockwise();
         }
         break;
     }
@@ -211,11 +207,11 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            cube.rotateBottomAnticlockwise();
+            scene.getCube().rotateBottomAnticlockwise();
         }
         else
         {
-            cube.rotateBottomClockwise();
+            scene.getCube().rotateBottomClockwise();
         }
         break;
     }
@@ -225,7 +221,7 @@ void Window::handleKeyPressed(sf::Event event, Cube& cube)
     }
 }
 
-void Window::handleKeyReleased(sf::Event event, Cube& cube)
+void Window::handleKeyReleased(sf::Event event)
 {
     switch(event.key.code)
     {
@@ -233,7 +229,7 @@ void Window::handleKeyReleased(sf::Event event, Cube& cube)
     {
         if(!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
-            camera.setSpeedZ(0.0f);
+            scene.getCamera().setSpeedZ(0.0f);
         }
         break;
     }
@@ -242,7 +238,7 @@ void Window::handleKeyReleased(sf::Event event, Cube& cube)
         {
         if(!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         {
-            camera.setSpeedZ(0.0f);
+            scene.getCamera().setSpeedZ(0.0f);
         }
         break;
     }
@@ -251,7 +247,7 @@ void Window::handleKeyReleased(sf::Event event, Cube& cube)
     {
         if(!sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
-            camera.setSpeedX(0.0f);
+            scene.getCamera().setSpeedX(0.0f);
         }
         break;
     }
@@ -260,7 +256,7 @@ void Window::handleKeyReleased(sf::Event event, Cube& cube)
     {
         if(!sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
-            camera.setSpeedX(0.0f);
+            scene.getCamera().setSpeedX(0.0f);
         }
         break;
     }
@@ -275,18 +271,18 @@ void Window::handleMouse(sf::Event event)
     // TODO: if(inFocus) // check focus
     if(event.mouseMove.y - (windowHeight/2) > 0)
     {
-        camera.pitch((event.mouseMove.y - lastMousePos.y) * mouseSensitivity); // Down
+        scene.getCamera().pitch((event.mouseMove.y - lastMousePos.y) * mouseSensitivity); // Down
     }
     else if(event.mouseMove.y - (windowHeight/2) < 0)
     {
-        camera.pitch((event.mouseMove.y - lastMousePos.y) * mouseSensitivity); // Up
+        scene.getCamera().pitch((event.mouseMove.y - lastMousePos.y) * mouseSensitivity); // Up
     }
     if(event.mouseMove.x - (windowWidth/2) > 0)
     {
-        camera.yaw(-(event.mouseMove.x - lastMousePos.x) * mouseSensitivity);  // Right
+        scene.getCamera().yaw(-(event.mouseMove.x - lastMousePos.x) * mouseSensitivity);  // Right
     }
     else if(event.mouseMove.x - (windowWidth/2) < 0)
     {
-        camera.yaw(-(event.mouseMove.x - lastMousePos.x) * mouseSensitivity);  // Left
+        scene.getCamera().yaw(-(event.mouseMove.x - lastMousePos.x) * mouseSensitivity);  // Left
     }
 }

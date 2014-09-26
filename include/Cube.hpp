@@ -1,15 +1,17 @@
+/**
+ * Representation of 3D rotating cube puzzle.
+ *
+ * @author mdq3
+ */
 
 #ifndef CUBE_H_
 #define CUBE_H_
 
-
 #include <vector>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
-
 #include "Model.hpp"
 #include "Importer.hpp"
-
 
 /**
  *

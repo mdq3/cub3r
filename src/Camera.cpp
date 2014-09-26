@@ -1,13 +1,10 @@
 
 #include <iostream>
 #include <iomanip> // For printInfo()
-
 #define GLM_FORCE_RADIANS
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
 #include "../include/Camera.hpp"
-
 
 Camera::Camera(int WindowWidth, int WindowHeight) :
 //eyePos(glm::vec3(0.0f, 0.0f, 10.0f)),

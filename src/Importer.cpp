@@ -2,12 +2,9 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
-
 #include "../include/Importer.hpp"
-
 
 #define DOCTYPE "q3d" // The 3D geometry file format
 

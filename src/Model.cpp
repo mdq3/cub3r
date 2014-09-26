@@ -2,11 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
-
 #include <SFML/Graphics.hpp>
-
 #include "../include/Model.hpp"
-
 
 Model::Model(std::vector<glm::vec3>& vertices, std::vector<glm::vec3>& normals, std::vector<glm::vec2>& uvs,
              std::string texturePath,GLuint vCount, GLuint shader, bool dynamicDraw) :

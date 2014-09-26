@@ -1,7 +1,6 @@
 
 #include <iostream>
 #include <cmath>
-
 #include "../include/Cube.hpp"
 
 Cube::Cube() {}

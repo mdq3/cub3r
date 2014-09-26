@@ -1,13 +1,16 @@
+/**
+ * Importer for q3d file format. Parses the XML and stores the data in a structure for
+ * generation of 3D graphics.
+ *
+ * @author mdq3
+ */
 
 #ifndef IMPORTER_H_
 #define IMPORTER_H_
 
-
 #include <vector>
-
 #include <glm/glm.hpp>
 #include <tinyxml2.h>
-
 
 /**
  *
