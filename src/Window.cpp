@@ -10,6 +10,21 @@ inFocus{true},
 mouseSensitivity{0.005},
 scene{windowWidth, windowHeight}
 {
+    initWindow();
+    initGL();
+    scene.initModels();
+}
+
+Window::~Window() {}
+
+void Window::renderScene()
+{
+    scene.render();
+    window.display(); // End current frame (swaps front and back buffers)
+}
+
+void Window::initWindow()
+{
     sf::ContextSettings settings;
     settings.depthBits = 24;
     settings.stencilBits = 8;
@@ -22,19 +37,9 @@ scene{windowWidth, windowHeight}
     window.setMouseCursorVisible(false);
     sf::Mouse::setPosition(sf::Vector2<int>(windowWidth/2, windowHeight/2), window);
     lastMousePos = sf::Mouse::getPosition(window);
-
-    init();
 }
 
-Window::~Window() {}
-
-void Window::renderScene()
-{
-    scene.render();
-    window.display(); // End current frame (swaps front and back buffers)
-}
-
-void Window::init()
+void Window::initGL()
 {
     GLenum res = glewInit();
     if (res != GLEW_OK) {
@@ -47,8 +52,6 @@ void Window::init()
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_2D);
     //glPolygonMode(GL_FRONT, GL_LINE); // Wireframe mode
-
-    scene.initModels();
 }
 
 glm::vec3 Window::getCameraPosition()
@@ -157,11 +160,11 @@ void Window::handleKeyPressed(sf::Event event)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            scene.getCube().rotateFrontAnticlockwise();
+            scene.getCube().rotateFront(90.0f, false);
         }
         else
         {
-            scene.getCube().rotateFrontClockwise();
+            scene.getCube().rotateFront(-90.0f, true);
         }
         break;
     }
@@ -170,11 +173,11 @@ void Window::handleKeyPressed(sf::Event event)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            scene.getCube().rotateBackAnticlockwise();
+            scene.getCube().rotateBack(-90.0f, false);
         }
         else
         {
-            scene.getCube().rotateBackClockwise();
+            scene.getCube().rotateBack(90.0f, true);
         }
         break;
     }
@@ -183,11 +186,11 @@ void Window::handleKeyPressed(sf::Event event)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            scene.getCube().rotateLeftAnticlockwise();
+            scene.getCube().rotateLeft(-90.0f, false);
         }
         else
         {
-            scene.getCube().rotateLeftClockwise();
+            scene.getCube().rotateLeft(90.0f, true);
         }
         break;
     }
@@ -196,11 +199,11 @@ void Window::handleKeyPressed(sf::Event event)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            scene.getCube().rotateRightAnticlockwise();
+            scene.getCube().rotateRight(90.0f, false);
         }
         else
         {
-            scene.getCube().rotateRightClockwise();
+            scene.getCube().rotateRight(-90.0f, true);
         }
         break;
     }
@@ -209,11 +212,11 @@ void Window::handleKeyPressed(sf::Event event)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            scene.getCube().rotateTopAnticlockwise();
+            scene.getCube().rotateTop(90.0f, false);
         }
         else
         {
-            scene.getCube().rotateTopClockwise();
+            scene.getCube().rotateTop(-90.0f, true);
         }
         break;
     }
@@ -222,11 +225,11 @@ void Window::handleKeyPressed(sf::Event event)
     {
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
-            scene.getCube().rotateBottomAnticlockwise();
+            scene.getCube().rotateBottom(-90.0f, false);
         }
         else
         {
-            scene.getCube().rotateBottomClockwise();
+            scene.getCube().rotateBottom(90.0f, true);
         }
         break;
     }

@@ -21,19 +21,12 @@ class Cube {
     /**
      * Constructor for Cube.
      */
-    Cube();
+    Cube(GLuint shaderProgram);
 
     /**
      * Destructor for Cube. Release resources.
      */
     ~Cube();
-
-    /**
-     * Create the cube by importing the data from file.
-     *
-     * @param shaderProgram The shader program to use for the Cube
-     */
-    void setupCube(GLuint shaderProgram);
 
     /**
      * Render every mesh in the cube.
@@ -47,19 +40,12 @@ class Cube {
      */
     void operations();
 
-    void rotateFrontClockwise();
-    void rotateBackClockwise();
-    void rotateLeftClockwise();
-    void rotateRightClockwise();
-    void rotateTopClockwise();
-    void rotateBottomClockwise();
-
-    void rotateFrontAnticlockwise();
-    void rotateBackAnticlockwise();
-    void rotateLeftAnticlockwise();
-    void rotateRightAnticlockwise();
-    void rotateTopAnticlockwise();
-    void rotateBottomAnticlockwise();
+    void rotateFront(GLfloat angle, bool clockwise);
+    void rotateBack(GLfloat angle, bool clockwise);
+    void rotateLeft(GLfloat angle, bool clockwise);
+    void rotateRight(GLfloat angle, bool clockwise);
+    void rotateTop(GLfloat angle, bool clockwise);
+    void rotateBottom(GLfloat angle, bool clockwise);
 
  private:
     std::vector<Model> cubes; // Cube models which make up the whole cube puzzle

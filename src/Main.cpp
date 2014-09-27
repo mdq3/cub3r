@@ -1,30 +1,22 @@
+/**
+ * main.cpp
+ *
+ * @author mdq3
+ */
 
 #include <iostream>
 #include <GL/glew.h>
 #include "../include/Window.hpp"
-#include "../include/Main.hpp"
 
-Main::Main(int windowWidth, int windowHeight) :
-window{windowWidth, windowHeight}
+int main(int argc, char* argv[])
 {
-    mainLoop();
-}
-
-Main::~Main() {}
-
-void Main::mainLoop()
-{
+    //std::cout << glGetString(GL_VERSION) << '\n';
+    Window window(1200, 1000);
     while(window.isRunning())
     {
         window.handleEvents();
         window.renderScene();
     }
     window.close();
-}
-
-int main(int argc, char* argv[])
-{
-    Main program(1200, 1000);
-    //std::cout << glGetString(GL_VERSION) << '\n';
     return 0;
 }

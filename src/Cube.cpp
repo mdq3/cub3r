@@ -3,11 +3,7 @@
 #include <cmath>
 #include "../include/Cube.hpp"
 
-Cube::Cube() {}
-
-Cube::~Cube() {}
-
-void Cube::setupCube(GLuint shaderProgram)
+Cube::Cube(GLuint shaderProgram)
 {
     Importer importer("resources/models/cub3.q3d");
 
@@ -18,13 +14,14 @@ void Cube::setupCube(GLuint shaderProgram)
             std::vector<glm::vec3> ns = mesh.ns;
             std::vector<glm::vec2> uv = mesh.uvs;
             std::string texture       = mesh.texturePath;
-
-            GLuint vertexCount = mesh.vsSize;
+            GLuint vertexCount        = mesh.vsSize;
 
             Model model(vs, ns, uv, texture, vertexCount, shaderProgram, true);
             cubes.push_back(model);
     }
 }
+
+Cube::~Cube() {}
 
 void Cube::render(glm::mat4 viewProjectionMatrix)
 {
@@ -42,64 +39,34 @@ void Cube::operations()
     }
 }
 
-void Cube::rotateFrontClockwise()
+void Cube::rotateFront(GLfloat angle, bool clockwise)
 {
-    rotate(-90.0f, glm::vec3(0.0f, 0.0f, 1.0f), frontFace, true);
+    rotate(angle, glm::vec3(0.0f, 0.0f, 1.0f), frontFace, clockwise);
 }
 
-void Cube::rotateBackClockwise()
+void Cube::rotateBack(GLfloat angle, bool clockwise)
 {
-    rotate(90.0f, glm::vec3(0.0f, 0.0f, 1.0f), backFace, true);
+    rotate(angle, glm::vec3(0.0f, 0.0f, 1.0f), backFace, clockwise);
 }
 
-void Cube::rotateLeftClockwise()
+void Cube::rotateLeft(GLfloat angle, bool clockwise)
 {
-    rotate(90.0f, glm::vec3(1.0f, 0.0f,0.0f), leftFace, true);
+    rotate(angle, glm::vec3(1.0f, 0.0f,0.0f), leftFace, clockwise);
 }
 
-void Cube::rotateRightClockwise()
+void Cube::rotateRight(GLfloat angle, bool clockwise)
 {
-    rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f), rightFace, true);
+    rotate(angle, glm::vec3(1.0f, 0.0f, 0.0f), rightFace, clockwise);
 }
 
-void Cube::rotateTopClockwise()
+void Cube::rotateTop(GLfloat angle, bool clockwise)
 {
-    rotate(-90.0f, glm::vec3(0.0f, 1.0f, 0.0f), topFace, true);
+    rotate(angle, glm::vec3(0.0f, 1.0f, 0.0f), topFace, clockwise);
 }
 
-void Cube::rotateBottomClockwise()
+void Cube::rotateBottom(GLfloat angle, bool clockwise)
 {
-    rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f), bottomFace, true);
-}
-
-void Cube::rotateFrontAnticlockwise()
-{
-    rotate(90.0f, glm::vec3(0.0f, 0.0f, 1.0f), frontFace, false);
-}
-
-void Cube::rotateBackAnticlockwise()
-{
-    rotate(-90.0f, glm::vec3(0.0f, 0.0f, 1.0f), backFace, false);
-}
-
-void Cube::rotateLeftAnticlockwise()
-{
-    rotate(-90.0f, glm::vec3(1.0f, 0.0f,0.0f), leftFace, false);
-}
-
-void Cube::rotateRightAnticlockwise()
-{
-    rotate(90.0f, glm::vec3(1.0f, 0.0f, 0.0f), rightFace, false);
-}
-
-void Cube::rotateTopAnticlockwise()
-{
-    rotate(90.0f, glm::vec3(0.0f, 1.0f, 0.0f), topFace, false);
-}
-
-void Cube::rotateBottomAnticlockwise()
-{
-    rotate(-90.0f, glm::vec3(0.0f, 1.0f, 0.0f), bottomFace, false);
+    rotate(angle, glm::vec3(0.0f, 1.0f, 0.0f), bottomFace, clockwise);
 }
 
 void Cube::rotate(GLfloat angle, glm::vec3 axis, std::vector<int> face, bool clockwise)

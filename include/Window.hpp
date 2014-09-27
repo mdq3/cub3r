@@ -33,7 +33,8 @@ class Window {
 
     void renderScene();
 
-    void init();
+    void initWindow();
+    void initGL();
 
     glm::vec3 getCameraPosition();
 
