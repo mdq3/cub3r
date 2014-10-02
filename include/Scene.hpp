@@ -54,7 +54,7 @@ class Scene {
  private:
     Camera camera;
     GLfloat cameraSpeed;
-    std::vector<Cube> models;
+    std::vector<Cube> assets;
     GLuint currentShaderProgram;
 
     struct Light

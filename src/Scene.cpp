@@ -25,10 +25,10 @@ void Scene::render()
     glEnableVertexAttribArray(2); // Vertex UV coordinate attribute
 
     updateLightsAndCamera();
-    for(Cube& model : models)
+    for(Cube& asset : assets)
     {
-        model.operations();
-        model.render(getProjectionViewMatrix());
+        asset.operations();
+        asset.render(getProjectionViewMatrix());
     }
 
     glDisableVertexAttribArray(0);
@@ -46,12 +46,12 @@ void Scene::initModels()
     currentShaderProgram = shaderProgram;
 
     Cube cube(shaderProgram);
-    models.push_back(cube);
+    assets.push_back(cube);
 }
 
 Cube& Scene::getCube()
 {
-    return models[0];
+    return assets[0];
 }
 
 Camera& Scene::getCamera()
