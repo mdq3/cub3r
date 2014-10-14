@@ -5,12 +5,13 @@
 #include <SFML/Graphics.hpp>
 #include "../include/Model.hpp"
 
+Model::Model() {}
+
 Model::Model(std::vector<glm::vec3>& vertices, std::vector<glm::vec3>& normals, std::vector<glm::vec2>& uvs,
-             std::string texturePath,GLuint vCount, GLuint shader, bool dynamicDraw) :
+             std::string texturePath, GLuint vCount, GLuint shader, GLfloat shininess, bool dynamicDraw) :
 shaderProgram{shader},
 vertexCount{vCount},
-materialShininess{50.0f},
-materialSpecularColor(glm::vec3(1.0f, 1.0f, 1.0f))
+materialShininess{shininess}
 {
     GLenum usage = GL_STATIC_DRAW;
     if(dynamicDraw)
@@ -46,37 +47,44 @@ void Model::worldRotate(GLfloat angle, glm::vec3 axis, GLfloat slerp)
     rotate(modelWorldRotateMatrix, angle, axis, slerp);
 }
 
-void Model::render(glm::mat4 viewProjectionMatrix)
+void Model::renderShadowMap(GLuint shadowProgram)
 {
-    modelMatrix = modelScaleMatrix *
-                  modelWorldRotateMatrix *
-                  modelTranslateMatrix *
-                  modelLocalRotateMatrix;
+    //glViewport(0, 0, 1200, 1000);
 
-    // Send MVP matrix to shader
-    GLint projectionMatrixLocation = glGetUniformLocation(shaderProgram, "modelViewProjectionMatrix"); // Get the location of the MVP matrix in the shader
-    glm::mat4 modelViewProjectionMatrix = viewProjectionMatrix * modelMatrix;                          // Create the new MVP matrix
-    glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);       // Send the MVP matrix to the shader
+    GLint modelMatrixLocation = glGetUniformLocation(shadowProgram, "modelMatrix");
+    glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
 
-    // Send model transform matrix to shader
+    glBindBuffer(GL_ARRAY_BUFFER, VBOposition);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+}
+
+void Model::render(glm::mat4 viewProjectionMatrix, glm::mat4 depthBiasMVP)
+{
+    GLint mvpMatrixLocation = glGetUniformLocation(shaderProgram, "modelViewProjectionMatrix");
+    glm::mat4 modelViewProjectionMatrix = viewProjectionMatrix * modelMatrix;
+    glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, &modelViewProjectionMatrix[0][0]);
+
     GLint modelMatrixLocation = glGetUniformLocation(shaderProgram, "modelTransformMatrix");
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, &modelMatrix[0][0]);
 
-    // Send material properties to shader
+    glm::mat3 normalMatrix = glm::inverse(glm::mat3(modelMatrix));
+    GLint normalMatrixLocation = glGetUniformLocation(shaderProgram, "normalMatrix");
+    glUniformMatrix3fv(normalMatrixLocation, 1, GL_TRUE, &normalMatrix[0][0]);
+
     GLint shininess = glGetUniformLocation(shaderProgram, "materialShininess");
     glUniform1f(shininess, materialShininess);
 
-    GLint specularColor = glGetUniformLocation(shaderProgram, "materialSpecularColor");
-    glUniform3fv(specularColor, 1, &materialSpecularColor[0]);
-
-    // Vertex buffer processing
     glBindBuffer(GL_ARRAY_BUFFER, VBOposition);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBOnormal);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+    glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture);
+    GLint textureID = glGetUniformLocation(shaderProgram, "textureSampler");
+    glUniform1i(textureID, 1);
     glBindBuffer(GL_ARRAY_BUFFER, VBOuv);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
@@ -89,6 +97,7 @@ void Model::operations()
     {
         doRotation();
     }
+    modelMatrix = modelScaleMatrix * modelWorldRotateMatrix * modelTranslateMatrix * modelLocalRotateMatrix;
 }
 
 void Model::createVBO(GLuint& VBO, std::vector<glm::vec3> data, GLenum usage)
@@ -168,7 +177,8 @@ void Model::doRotation()
 {
     localRotate(currentRotationAngle, currentRotationAxis, currentSlerpVal);
     currentSlerpVal += slerpRate;
-    currentSlerpVal = floor(currentSlerpVal * pow(10.0f, 2) + 0.5f) / pow(10.0f, 2); // Correct float arith errors
+    // Correct float arith errors to 3 decimal places
+    currentSlerpVal = floor(currentSlerpVal * pow(10.0f, 3) + 0.5f) / pow(10.0f, 3);
     if(currentSlerpVal > 1.0f)
     {
         currentSlerpVal = 0.0f;

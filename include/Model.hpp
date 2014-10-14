@@ -8,7 +8,6 @@
 #ifndef MODEL_H_
 #define MODEL_H_
 
-
 #include <vector>
 #include <string>
 
@@ -19,18 +18,18 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
 /**
  *
  */
 class Model {
  public:
+    Model();
 
     /**
      * Constructor for Model.
      */
     Model(std::vector<glm::vec3>& vertices, std::vector<glm::vec3>& normals, std::vector<glm::vec2>& uvs,
-          std::string texturePath, GLuint vCount, GLuint shader, bool dynamicDraw);
+          std::string texturePath, GLuint vCount, GLuint shader, GLfloat shininess, bool dynamicDraw);
 
     /**
      * Destructor for Model. Release resources.
@@ -45,7 +44,9 @@ class Model {
 
     void worldRotate(GLfloat angle, glm::vec3 axis, GLfloat slerp);
 
-    void render(glm::mat4 viewProjectionMatrix);
+    void renderShadowMap(GLuint shadowProgram);
+
+    void render(glm::mat4 viewProjectionMatrix, glm::mat4 depthBiasMVP);
 
     void operations();
 
@@ -61,7 +62,6 @@ class Model {
 
     // Material Properties
     GLfloat materialShininess;
-    glm::vec3 materialSpecularColor;
 
     glm::mat4 modelMatrix;            // The complete model transform matrix
     glm::mat4 modelScaleMatrix;       // The model's scale matrix

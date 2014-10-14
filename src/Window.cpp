@@ -3,15 +3,16 @@
 #include "../include/Window.hpp"
 
 Window::Window(int width, int height) :
-windowWidth{width},
-windowHeight{height},
+width{width},
+height{height},
 running{true},
 inFocus{true},
 mouseSensitivity{0.005},
-scene{windowWidth, windowHeight}
+scene{width, height}
 {
     initWindow();
     initGL();
+    scene.initShadowMap(width, height);
     scene.initModels();
 }
 
@@ -32,10 +33,10 @@ void Window::initWindow()
     settings.majorVersion = 3;
     settings.minorVersion = 3;
 
-    window.create(sf::VideoMode(windowWidth, windowHeight), "Cub3r", sf::Style::Default, settings);
+    window.create(sf::VideoMode(width, height), "Cub3r", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
     window.setMouseCursorVisible(false);
-    sf::Mouse::setPosition(sf::Vector2<int>(windowWidth/2, windowHeight/2), window);
+    sf::Mouse::setPosition(sf::Vector2<int>(width/2, height/2), window);
     lastMousePos = sf::Mouse::getPosition(window);
 }
 
@@ -48,6 +49,7 @@ void Window::initGL()
     }
 
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+    glViewport(0, 0, width, height);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glEnable(GL_TEXTURE_2D);
@@ -83,8 +85,8 @@ void Window::handleEvents()
 
         case sf::Event::Resized:
             glViewport(0, 0, event.size.width, event.size.height);
-            windowWidth = event.size.width;
-            windowHeight = event.size.height;
+            width = event.size.width;
+            height = event.size.height;
             break;
 
         case sf::Event::LostFocus:
@@ -118,7 +120,7 @@ void Window::handleEvents()
 void Window::handleCamera()
 {
     scene.handleCamera();
-    sf::Mouse::setPosition(sf::Vector2<int>(windowWidth/2, windowHeight/2), window);
+    sf::Mouse::setPosition(sf::Vector2<int>(width/2, height/2), window);
     lastMousePos = sf::Mouse::getPosition(window);
 }
 
@@ -287,19 +289,19 @@ void Window::handleKeyReleased(sf::Event event)
 void Window::handleMouse(sf::Event event)
 {
     // TODO: if(inFocus) // check focus
-    if(event.mouseMove.y - (windowHeight/2) > 0)
+    if(event.mouseMove.y - (height/2) > 0)
     {
         scene.getCamera().pitch((event.mouseMove.y - lastMousePos.y) * mouseSensitivity); // Down
     }
-    else if(event.mouseMove.y - (windowHeight/2) < 0)
+    else if(event.mouseMove.y - (height/2) < 0)
     {
         scene.getCamera().pitch((event.mouseMove.y - lastMousePos.y) * mouseSensitivity); // Up
     }
-    if(event.mouseMove.x - (windowWidth/2) > 0)
+    if(event.mouseMove.x - (width/2) > 0)
     {
         scene.getCamera().yaw(-(event.mouseMove.x - lastMousePos.x) * mouseSensitivity);  // Right
     }
-    else if(event.mouseMove.x - (windowWidth/2) < 0)
+    else if(event.mouseMove.x - (width/2) < 0)
     {
         scene.getCamera().yaw(-(event.mouseMove.x - lastMousePos.x) * mouseSensitivity);  // Left
     }

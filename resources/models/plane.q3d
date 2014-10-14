@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<q3d version="0.7">
+  <info>
+    <author></author>
+    <created>2014-10-14</created>
+  </info>
+  <object id="Plane">
+    <mesh id="Plane_mesh">
+      <vertex_positions id="Plane_positions" count="6">-30.2406 -3.0000 30.2406 30.2406 -3.0000 30.2406 30.2406 -3.0000 -30.2406 -30.2406 -3.0000 -30.2406 -30.2406 -3.0000 30.2406 30.2406 -3.0000 -30.2406</vertex_positions>
+      <vertex_normals id="Plane_normals" count="6">0.0000 1.0000 -0.0000 0.0000 1.0000 -0.0000 0.0000 1.0000 -0.0000 0.0000 1.0000 -0.0000 0.0000 1.0000 -0.0000 0.0000 1.0000 -0.0000</vertex_normals>
+      <uv_coords id="Plane_uv" count="6">0.0001 0.9999 0.9999 0.9999 0.9999 0.0001 0.0001 0.0001 0.0001 0.9999 0.9999 0.0001</uv_coords>
+      <texture_image id="Plane_texture">resources/textures/plane_texture.png</texture_image>
+    </mesh>
+  </object>
+</q3d>

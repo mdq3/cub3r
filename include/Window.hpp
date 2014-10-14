@@ -59,8 +59,8 @@ class Window {
 
  private:
     sf::Window window;
-    int windowWidth;
-    int windowHeight;
+    int width;
+    int height;
     bool running;
     bool inFocus;
     sf::Vector2i lastMousePos;

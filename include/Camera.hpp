@@ -16,7 +16,7 @@
 class Camera {
  public:
 
-    Camera(int WindowWidth, int WindowHeight);
+    Camera(int windowWidth, int windowHeight);
     ~Camera();
 
     glm::mat4 getViewMatrix();

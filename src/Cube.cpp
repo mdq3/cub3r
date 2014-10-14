@@ -6,7 +6,6 @@
 Cube::Cube(GLuint shaderProgram)
 {
     Importer importer("resources/models/cub3.q3d");
-
     std::vector<Importer::Mesh> objects = importer.getObjects();
     for(Importer::Mesh& mesh : objects)
     {
@@ -16,18 +15,26 @@ Cube::Cube(GLuint shaderProgram)
             std::string texture       = mesh.texturePath;
             GLuint vertexCount        = mesh.vsSize;
 
-            Model model(vs, ns, uv, texture, vertexCount, shaderProgram, true);
+            Model model(vs, ns, uv, texture, vertexCount, shaderProgram, 50.0f, true);
             cubes.push_back(model);
     }
 }
 
 Cube::~Cube() {}
 
-void Cube::render(glm::mat4 viewProjectionMatrix)
+void Cube::renderShadowMap(GLuint shadowProgram)
 {
     for(Model& cube : cubes)
     {
-        cube.render(viewProjectionMatrix);
+        cube.renderShadowMap(shadowProgram);
+    }
+}
+
+void Cube::render(glm::mat4 viewProjectionMatrix, glm::mat4 depthBiasMVP)
+{
+    for(Model& cube : cubes)
+    {
+        cube.render(viewProjectionMatrix, depthBiasMVP);
     }
 }
 

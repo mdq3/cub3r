@@ -2,7 +2,7 @@
 <q3d version="0.7">
   <info>
     <author></author>
-    <created>2014-09-11</created>
+    <created>2014-10-14</created>
   </info>
   <object id="corner_back_bottom_left">
     <mesh id="corner_back_bottom_left_mesh">

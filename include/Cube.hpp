@@ -28,12 +28,14 @@ class Cube {
      */
     ~Cube();
 
+    void renderShadowMap(GLuint shadowProgram);
+
     /**
      * Render every mesh in the cube.
      *
      * @param viewProjectionMatrix The VPM matrix rendering the cube
      */
-    void render(glm::mat4 viewProjectionMatrix);
+    void render(glm::mat4 viewProjectionMatrix, glm::mat4 depthBiasMVP);
 
     /**
      * Execute transformation operations for current render cycle.
