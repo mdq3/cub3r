@@ -3,6 +3,8 @@
 #include <cmath>
 #include "../include/Cube.hpp"
 
+Cube::Cube() {}
+
 Cube::Cube(GLuint shaderProgram)
 {
     Importer importer("resources/models/cub3.q3d");

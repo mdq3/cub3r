@@ -81,7 +81,6 @@ void main()
 
     vec3 linearColor    = min(surfaceColor.rgb * scatteredLight + reflectedLight, vec3(1.0));
     color = vec4(linearColor, surfaceColor.a);
-    //color = textureProj(shadowMap, shadowCoord) * vec4(1.0);
 
     // Final color (with gamma correction)
     //vec3 gamma = vec3(1.0 / 2.2);

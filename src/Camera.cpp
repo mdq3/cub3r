@@ -22,12 +22,7 @@ Camera::~Camera() {}
 
 glm::mat4 Camera::getViewMatrix()
 {
-    glm::mat4 ViewMatrix = glm::lookAt(
-        eyePos,
-        center,
-        up
-    );
-    return ViewMatrix;
+    return glm::lookAt(eyePos, center, up);;
 }
 
 glm::mat4 Camera::getProjectionMatrix()
@@ -73,13 +68,8 @@ void Camera::setProjectionPerspective(GLfloat fov, GLfloat aspectRatio, GLfloat 
 
 void Camera::setProjectionOrthographic()
 {
-    projectionMatrix = glm::ortho(
-        -1.0f,    // Left
-         1.0f,    // Right
-        -1.0f,    // Bottom
-         1.0f,    // Top
-         0.1f,    // zear
-         100.0f); // zFar
+    // Left, Right, Bottom, Top, zNear, zFar
+    projectionMatrix = glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
 }
 
 void Camera::roll(GLfloat angle)

@@ -20,14 +20,31 @@ class Scene {
 
     ~Scene();
 
-    void render();
-
-    void renderPass();
-    void shadowPass();
-
+    /**
+     * Initialize the models that appear in this scene.
+     */
     void initModels();
 
+    /**
+     * Initialize the shadow map to be used in this scene.
+     */
     void initShadowMap(int windowWidth, int windowHeight);
+
+    /**
+     * Render the entire scene.
+     */
+    void render();
+
+    /**
+     * Render the scene from light's POV into depth frame buffer.
+     */
+    void shadowPass();
+
+    /**
+     * Render all of the scene's models using camera, lighting and
+     * shadow data.
+     */
+    void renderPass();
 
     Cube& getCube();
     Camera& getCamera();
@@ -60,15 +77,14 @@ class Scene {
  private:
     Camera camera;
     GLfloat cameraSpeed;
-    std::vector<Cube> assets;
+    Cube cube;
+    Model plane;
     GLuint currentShaderProgram;
 
-    GLuint FBOshadow; // Framebuffer object for shadow mapping
-    GLuint shadowMap; // The texture for shadow mapping
-    glm::mat4 depthBiasMVP;
-    GLuint shaderProgramShadowMap;
-
-    Model plane;
+    GLuint FBOshadow;              // Framebuffer object for shadow mapping
+    GLuint shadowMap;              // The texture for shadow mapping
+    glm::mat4 depthBiasMVP;        // The view projection matrix in light-space for shadow map rendering
+    GLuint shaderProgramShadowMap; // Shader program for rendering shadow map
 
     // Bias matrix for converting space coord to image coord (-1.0 to 1.0 -> 0.0 to 1.0)
     const glm::mat4 biasMatrix = glm::mat4(

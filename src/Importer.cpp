@@ -89,11 +89,9 @@ std::vector<glm::vec3> Importer::toVertexArray(int count, std::string dataString
         float v1;
         float v2;
         float v3;
-
         vertexStream >> v1;
         vertexStream >> v2;
         vertexStream >> v3;
-
         vertices.push_back(glm::vec3(v1, v2, v3));
     }
     return vertices;
@@ -107,10 +105,8 @@ std::vector<glm::vec2> Importer::toUVArray(int count, std::string dataString)
     {
         float v1;
         float v2;
-
         uvStream >> v1;
         uvStream >> v2;
-
         uvs.push_back(glm::vec2(v1, v2));
     }
     return uvs;

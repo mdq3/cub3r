@@ -24,19 +24,12 @@ depthBiasMVP(glm::mat4(1.0f))
 
 Scene::~Scene() {}
 
-void Scene::render()
-{
-    shadowPass();
-    //visualizeShadowMap(); // For testing purposes only
-    renderPass();
-}
-
 void Scene::initModels()
 {
     currentShaderProgram = createShaderProgram("resources/shaders/shader.vert",
                                                "resources/shaders/shader.frag");
-    Cube cube(currentShaderProgram);
-    assets.push_back(cube);
+    Cube c(currentShaderProgram);
+    cube = c;
 
     Importer importer("resources/models/plane.q3d");
     std::vector<Importer::Mesh> objects = importer.getObjects();
@@ -78,6 +71,13 @@ void Scene::initShadowMap(int windowWidth, int windowHeight)
     glBindFramebuffer(GL_FRAMEBUFFER, 0); // Bind windowing system's framebuffer
 }
 
+void Scene::render()
+{
+    shadowPass();
+    //visualizeShadowMap(); // For testing purposes only
+    renderPass();
+}
+
 void Scene::shadowPass()
 {
     glm::mat4 depthProjectionMatrix = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 10.0f, 20.0f);
@@ -87,7 +87,6 @@ void Scene::shadowPass()
 
     glUseProgram(shaderProgramShadowMap);
     glBindFramebuffer(GL_FRAMEBUFFER, FBOshadow);
-
     glClear(GL_DEPTH_BUFFER_BIT);
     glPolygonOffset(4.0f, 4.0f);
     glEnable(GL_POLYGON_OFFSET_FILL); // Avoid depth fighting issues
@@ -95,13 +94,10 @@ void Scene::shadowPass()
     GLint mvp = glGetUniformLocation(shaderProgramShadowMap, "shadowViewProjectionMatrix");
     glUniformMatrix4fv(mvp, 1, GL_FALSE, &shadowViewProjection[0][0]);
 
-    // Render from the light’s point of view
     glEnableVertexAttribArray(0);
-    for(Cube& asset : assets)
-    {
-        asset.operations();
-        asset.renderShadowMap(shaderProgramShadowMap);
-    }
+
+    cube.operations();
+    cube.renderShadowMap(shaderProgramShadowMap);
     plane.renderShadowMap(shaderProgramShadowMap);
 
     glDisableVertexAttribArray(0);
@@ -127,10 +123,7 @@ void Scene::renderPass()
     GLint shadowMapID = glGetUniformLocation(currentShaderProgram, "shadowMap");
     glUniform1i(shadowMapID, 0);
 
-    for(Cube& asset : assets)
-    {
-        asset.render(getProjectionViewMatrix(), depthBiasMVP);
-    }
+    cube.render(getProjectionViewMatrix(), depthBiasMVP);
     plane.render(getProjectionViewMatrix(), depthBiasMVP);
 
     glDisableVertexAttribArray(0);
@@ -140,7 +133,7 @@ void Scene::renderPass()
 
 Cube& Scene::getCube()
 {
-    return assets[0];
+    return cube;
 }
 
 Camera& Scene::getCamera()
@@ -199,7 +192,6 @@ void Scene::addShader(GLuint shaderProgram, const char* file, GLenum shaderType)
     std::string shaderString;
     const GLchar* shaderSrc;
     std::ifstream sourceFile(file);
-
     if(sourceFile)
     {
         shaderString.assign((std::istreambuf_iterator<char>(sourceFile)), std::istreambuf_iterator<char>());
@@ -222,7 +214,6 @@ void Scene::addShader(GLuint shaderProgram, const char* file, GLenum shaderType)
     glCompileShader(shaderObj);
     GLint success;
     glGetShaderiv(shaderObj, GL_COMPILE_STATUS, &success);
-
     if(!success)
     {
         GLchar infoLog[1024];
@@ -230,26 +221,22 @@ void Scene::addShader(GLuint shaderProgram, const char* file, GLenum shaderType)
         std::cout << "Error compiling shader: " << infoLog << '\n';
         exit(1);
     }
-
     glAttachShader(shaderProgram, shaderObj);
 }
 
 GLuint Scene::createShaderProgram(const char* vertShaderPath, const char* fragShaderPath)
 {
     GLuint shaderProgram = glCreateProgram();
-
     if(shaderProgram == 0)
     {
         std::cout << "Error creating shader program\n";
         exit(1);
     }
-
     addShader(shaderProgram, vertShaderPath, GL_VERTEX_SHADER);
     addShader(shaderProgram, fragShaderPath, GL_FRAGMENT_SHADER);
 
     GLint success = 0;
     GLchar errorLog[1024] = {0};
-
     glLinkProgram(shaderProgram);
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
     if(success == 0)
@@ -258,7 +245,6 @@ GLuint Scene::createShaderProgram(const char* vertShaderPath, const char* fragSh
         std::cout << "Error linking shader program: " << errorLog << '\n';
         exit(1);
     }
-
     glValidateProgram(shaderProgram);
     glGetProgramiv(shaderProgram, GL_VALIDATE_STATUS, &success);
     if(!success)
@@ -280,7 +266,6 @@ void Scene::visualizeShadowMap()
          1.0f, -1.0f, 0.0f,
          1.0f,  1.0f, 0.0f,
     };
-    //glViewport(0, 0, 1200, 1000);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
     GLuint VBOquad;
     glGenBuffers(1, &VBOquad);

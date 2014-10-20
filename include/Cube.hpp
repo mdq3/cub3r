@@ -18,6 +18,8 @@
  */
 class Cube {
  public:
+    Cube();
+
     /**
      * Constructor for Cube.
      */

@@ -36,6 +36,9 @@ class Camera {
     void setProjectionPerspective(GLfloat fov, GLfloat aspectRatio, GLfloat near, GLfloat far);
     void setProjectionOrthographic();
 
+    /**
+     * Print camera vectors for testing purposes.
+     */
     void printInfo();
 
  private:
