@@ -11,7 +11,7 @@ Keyboard:
 **I** - Rotate top face  
 **M** - Rotate bottom face  
 **J** - Rotate left face  
-**L** - Rotateright face  
+**L** - Rotate right face  
 **K** - Rotate front face  
 **O** - Rotate back face  
 **(hold) LShift** - Rotate anticlockwise  
