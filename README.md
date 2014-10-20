@@ -21,7 +21,7 @@ Keyboard:
 
 Use make or manually: 
 
-g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lSDL2 -lSDL2_image -lGL -lGLEW -ltinyxml2 -o ../bin/cub3r
+    g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lSDL2 -lSDL2_image -lGL -lGLEW -ltinyxml2 -o ../bin/cub3r
 
 
 ## Dependencies ##
