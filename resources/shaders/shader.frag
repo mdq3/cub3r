@@ -1,4 +1,4 @@
-#version 330
+#version 330 core
 
 uniform struct Light
 {
@@ -32,7 +32,7 @@ void main()
     vec3 normal = normalize(normalMatrix * fragNormal);
 
     // Surface attributes
-    vec3 surfacePosition = vec3(modelTransformMatrix * vec4(fragVert, 1));
+    vec3 surfacePosition = vec3(modelTransformMatrix * vec4(fragVert, 1.0));
     vec4 surfaceColor    = texture2D(textureSampler, fragUV);
     vec3 surfaceToCamera = normalize(cameraPosition - surfacePosition);
     vec3 surfaceToLight  = light.direction;
@@ -59,14 +59,14 @@ void main()
 
     // Light attenuation
     float distanceToLight = length(light.position - surfacePosition);
-    float attenuation     = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2));
+    float attenuation     = 1.0 / (1.0 + light.attenuation * pow(distanceToLight, 2.0));
 
     // Shadow
     float sum = 0;
-    sum += textureProjOffset(shadowMap, shadowCoord, ivec2(-1,-1));
-    sum += textureProjOffset(shadowMap, shadowCoord, ivec2(-1,1));
-    sum += textureProjOffset(shadowMap, shadowCoord, ivec2(1,1));
-    sum += textureProjOffset(shadowMap, shadowCoord, ivec2(1,-1));
+    sum += textureProjOffset(shadowMap, shadowCoord, ivec2(-1.0, -1.0));
+    sum += textureProjOffset(shadowMap, shadowCoord, ivec2(-1.0, 1.0));
+    sum += textureProjOffset(shadowMap, shadowCoord, ivec2(1.0, 1.0));
+    sum += textureProjOffset(shadowMap, shadowCoord, ivec2(1.0, -1.0));
     float shadow = sum * 0.25;
     //shadow = textureProj(shadowMap, shadowCoord);
 

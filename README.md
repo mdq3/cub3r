@@ -21,7 +21,7 @@ Keyboard:
 
 Use make or manually: 
 
-g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lGL -lGLEW -lsfml-system -lsfml-window -lsfml-graphics -ltinyxml2 -o ../bin/cub3r
+g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.cpp -lSDL2 -lSDL2_image -lGL -lGLEW -ltinyxml2 -o ../bin/cub3r
 
 
 ## Dependencies ##
@@ -29,9 +29,8 @@ g++ -std=c++11 -Wall Main.cpp Model.cpp Camera.cpp Importer.cpp Cube.cpp Window.
 * OpenGL (at least 3.3)
 * GL Extension Wrangler (glew)
 * OpenGL Mathematics (GLM)
-* SFML
-* SFML window
-* SFML graphics
+* SDL2
+* SDL2 image
 * TinyXML-2
 
 

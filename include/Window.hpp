@@ -1,5 +1,5 @@
 /**
- * Setup SFML window, handle events and 3D camera.
+ * Setup SDL2 window, handle events and 3D camera.
  *
  * @author mdq3
  */
@@ -7,9 +7,9 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
+#include <SDL2/SDL.h>
 #include <GL/glew.h>
-#include <SFML/Window.hpp>
-#include <SFML/OpenGL.hpp>
+#include <SDL2/SDL_opengl.h>
 #include <glm/glm.hpp>
 #include "Scene.hpp"
 
@@ -19,7 +19,7 @@
 class Window {
  public:
     /**
-     * Constructor for Window. Create new SFML window with OpenGL context.
+     * Constructor for Window. Create new SDL2 window with OpenGL context.
      *
      * @param width The initial width of the window
      * @param height The initial height of the window
@@ -55,24 +55,21 @@ class Window {
      */
     void handleEvents();
 
-    void handleCamera();
-
  private:
-    sf::Window window;
+    SDL_Window* window;
+    SDL_GLContext gContext;
+
     int width;
     int height;
     bool running;
     bool inFocus;
-    sf::Vector2i lastMousePos;
     GLfloat mouseSensitivity;
 
     Scene scene;
 
-    void handleKeyPressed(sf::Event event);
+    void handleKeyPressed(SDL_Keycode value);
 
-    void handleKeyReleased(sf::Event event);
-
-    void handleMouse(sf::Event event);
+    void handleKeyReleased(SDL_Keycode value);
 };
 
 #endif // WINDOW_H_

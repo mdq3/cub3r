@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <SDL2/SDL_image.h>
 #include "../include/Window.hpp"
 
 Window::Window(int width, int height) :
@@ -21,32 +22,56 @@ Window::~Window() {}
 void Window::renderScene()
 {
     scene.render();
-    window.display(); // End current frame (swaps front and back buffers)
+    SDL_GL_SwapWindow(window);
 }
 
 void Window::initWindow()
 {
-    sf::ContextSettings settings;
-    settings.depthBits = 24;
-    settings.stencilBits = 8;
-    settings.antialiasingLevel = 4;
-    settings.majorVersion = 3;
-    settings.minorVersion = 3;
+    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        std::cout << "SDL could not initialize! SDL Error: " << SDL_GetError() << '\n';
+        exit(1);
+    }
 
-    window.create(sf::VideoMode(width, height), "Cub3r", sf::Style::Default, settings);
-    window.setVerticalSyncEnabled(true);
-    window.setMouseCursorVisible(false);
-    sf::Mouse::setPosition(sf::Vector2<int>(width/2, height/2), window);
-    lastMousePos = sf::Mouse::getPosition(window);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+    window = SDL_CreateWindow("Cub3r", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    if(window == NULL)
+    {
+        std::cout << "Window could not be created! SDL Error:  " << SDL_GetError() << '\n';
+        exit(1);
+    }
+
+    if(!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+    {
+        std::cout << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << '\n';
+        exit(1);
+    }
+
+    gContext = SDL_GL_CreateContext(window);
+    if(gContext == NULL)
+    {
+        std::cout << "OpenGL context could not be created! SDL Error: " << SDL_GetError() << '\n';
+        exit(1);
+    }
+    SDL_GL_SetSwapInterval(1); // Sync buffer swap to screen refresh rate
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 void Window::initGL()
 {
+    glewExperimental = GL_TRUE;
     GLenum res = glewInit();
     if (res != GLEW_OK) {
         std::cout << "Error: " << glewGetErrorString(res) << '\n';
         exit(1);
     }
+    //std::cout << glGetString(GL_VERSION) << '\n';
 
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
     glViewport(0, 0, width, height);
@@ -63,7 +88,8 @@ glm::vec3 Window::getCameraPosition()
 
 void Window::close()
 {
-    window.close();
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 }
 
 bool Window::isRunning()
@@ -73,94 +99,78 @@ bool Window::isRunning()
 
 void Window::handleEvents()
 {
-    sf::Event event;
-    while (window.pollEvent(event))
+    SDL_Event event;
+    while(SDL_PollEvent(&event) != 0)
     {
         switch(event.type)
         {
-        case sf::Event::Closed:
+        case SDL_QUIT:
             running = false;
-            window.close();
+            close();
             break;
-
-        case sf::Event::Resized:
-            glViewport(0, 0, event.size.width, event.size.height);
-            width = event.size.width;
-            height = event.size.height;
+        case SDL_KEYDOWN:
+            handleKeyPressed(event.key.keysym.sym);
             break;
-
-        case sf::Event::LostFocus:
-            inFocus = false;
+        case SDL_KEYUP:
+            handleKeyReleased(event.key.keysym.sym);
             break;
-
-        case sf::Event::GainedFocus:
-            inFocus = true;
+        case SDL_MOUSEMOTION:
+            scene.getCamera().pitch(event.motion.yrel * mouseSensitivity);
+            scene.getCamera().yaw(-(event.motion.xrel * mouseSensitivity));
             break;
-
-        case sf::Event::KeyPressed:
-            handleKeyPressed(event);
-            break;
-
-        case sf::Event::KeyReleased:
-            handleKeyReleased(event);
-            break;
-
-        case sf::Event::MouseMoved:
-            handleMouse(event);
-            break;
-
-        default:
+        case SDL_WINDOWEVENT:
+            switch(event.window.event)
+            {
+            case SDL_WINDOWEVENT_RESIZED:
+                glViewport(0, 0, event.window.data1, event.window.data2);
+                break;
+            case SDL_WINDOWEVENT_FOCUS_LOST:
+                inFocus = false;
+                break;
+            case SDL_WINDOWEVENT_FOCUS_GAINED:
+                inFocus = true;
+                break;
+            }
             break;
         }
     }
-
-    handleCamera();
-}
-
-void Window::handleCamera()
-{
     scene.handleCamera();
-    sf::Mouse::setPosition(sf::Vector2<int>(width/2, height/2), window);
-    lastMousePos = sf::Mouse::getPosition(window);
 }
 
-void Window::handleKeyPressed(sf::Event event)
+void Window::handleKeyPressed(SDL_Keycode value)
 {
-    switch(event.key.code)
+    const Uint8* keystates = SDL_GetKeyboardState(NULL);
+    switch(value)
     {
-    case sf::Keyboard::Escape:
+    case SDLK_ESCAPE:
     {
         running = false;
         break;
     }
-
-    case sf::Keyboard::W:
+    case SDLK_w:
     {
         scene.getCamera().setSpeedZ(scene.getCameraSpeed());
         break;
     }
-
-    case sf::Keyboard::S:
+    case SDLK_s:
     {
         scene.getCamera().setSpeedZ(-scene.getCameraSpeed());
         break;
     }
-
-    case sf::Keyboard::A:
+    case SDLK_a:
     {
         scene.getCamera().setSpeedX(scene.getCameraSpeed());
         break;
     }
-
-    case sf::Keyboard::D:
+    case SDLK_d:
     {
         scene.getCamera().setSpeedX(-scene.getCameraSpeed());
         break;
     }
-
-    case sf::Keyboard::K:
+    case SDLK_k:
     {
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        if(keystates[SDL_SCANCODE_LSHIFT])
+
         {
             scene.getCube().rotateFront(90.0f, false);
         }
@@ -170,10 +180,9 @@ void Window::handleKeyPressed(sf::Event event)
         }
         break;
     }
-
-    case sf::Keyboard::O:
+    case SDLK_o:
     {
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        if(keystates[SDL_SCANCODE_LSHIFT])
         {
             scene.getCube().rotateBack(-90.0f, false);
         }
@@ -183,10 +192,9 @@ void Window::handleKeyPressed(sf::Event event)
         }
         break;
     }
-
-    case sf::Keyboard::J:
+    case SDLK_j:
     {
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        if(keystates[SDL_SCANCODE_LSHIFT])
         {
             scene.getCube().rotateLeft(-90.0f, false);
         }
@@ -196,10 +204,9 @@ void Window::handleKeyPressed(sf::Event event)
         }
         break;
     }
-
-    case sf::Keyboard::L:
+    case SDLK_l:
     {
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        if(keystates[SDL_SCANCODE_LSHIFT])
         {
             scene.getCube().rotateRight(90.0f, false);
         }
@@ -209,10 +216,9 @@ void Window::handleKeyPressed(sf::Event event)
         }
         break;
     }
-
-    case sf::Keyboard::I:
+    case SDLK_i:
     {
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        if(keystates[SDL_SCANCODE_LSHIFT])
         {
             scene.getCube().rotateTop(90.0f, false);
         }
@@ -222,10 +228,9 @@ void Window::handleKeyPressed(sf::Event event)
         }
         break;
     }
-
-    case sf::Keyboard::M:
+    case SDLK_m:
     {
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        if(keystates[SDL_SCANCODE_LSHIFT])
         {
             scene.getCube().rotateBottom(-90.0f, false);
         }
@@ -235,74 +240,49 @@ void Window::handleKeyPressed(sf::Event event)
         }
         break;
     }
-
     default:
         break;
     }
 }
 
-void Window::handleKeyReleased(sf::Event event)
+void Window::handleKeyReleased(SDL_Keycode value)
 {
-    switch(event.key.code)
+    const Uint8* keystates = SDL_GetKeyboardState(NULL);
+    switch(value)
     {
-    case sf::Keyboard::W:
+    case SDLK_w:
     {
-        if(!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        if(!keystates[SDL_SCANCODE_S])
         {
             scene.getCamera().setSpeedZ(0.0f);
         }
         break;
     }
-
-    case sf::Keyboard::S:
+    case SDLK_s:
         {
-        if(!sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        if(!keystates[SDL_SCANCODE_W])
         {
             scene.getCamera().setSpeedZ(0.0f);
         }
         break;
     }
-
-    case sf::Keyboard::A:
+    case SDLK_a:
     {
-        if(!sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        if(!keystates[SDL_SCANCODE_D])
         {
             scene.getCamera().setSpeedX(0.0f);
         }
         break;
     }
-
-    case sf::Keyboard::D:
+    case SDLK_d:
     {
-        if(!sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        if(!keystates[SDL_SCANCODE_A])
         {
             scene.getCamera().setSpeedX(0.0f);
         }
         break;
     }
-
     default:
         break;
-    }
-}
-
-void Window::handleMouse(sf::Event event)
-{
-    // TODO: if(inFocus) // check focus
-    if(event.mouseMove.y - (height/2) > 0)
-    {
-        scene.getCamera().pitch((event.mouseMove.y - lastMousePos.y) * mouseSensitivity); // Down
-    }
-    else if(event.mouseMove.y - (height/2) < 0)
-    {
-        scene.getCamera().pitch((event.mouseMove.y - lastMousePos.y) * mouseSensitivity); // Up
-    }
-    if(event.mouseMove.x - (width/2) > 0)
-    {
-        scene.getCamera().yaw(-(event.mouseMove.x - lastMousePos.x) * mouseSensitivity);  // Right
-    }
-    else if(event.mouseMove.x - (width/2) < 0)
-    {
-        scene.getCamera().yaw(-(event.mouseMove.x - lastMousePos.x) * mouseSensitivity);  // Left
     }
 }

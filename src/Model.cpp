@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
-#include <SFML/Graphics.hpp>
+#include <SDL2/SDL_image.h>
 #include "../include/Model.hpp"
 
 Model::Model() {}
@@ -116,18 +116,20 @@ void Model::createUVBuffer(GLuint& VBOuv, std::vector<glm::vec2> data, GLenum us
 
 void Model::createTexture(std::string filePath)
 {
-    sf::Image image;
-    if (!image.loadFromFile(filePath))
+    SDL_Surface* image = IMG_Load(filePath.c_str());
+    if(image == NULL)
     {
-        std::cout << "Error: could not load texture " << filePath;
+        std::cout << "Could not load image! SDL_image Error: " << filePath.c_str() << ' ' << IMG_GetError() << '\n';
     }
 
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getSize().x, image.getSize().y,
-                 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image->w, image->h,
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, image->pixels);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    SDL_FreeSurface(image);
 }
 
 void Model::generateVertexNormals(std::vector<glm::vec3> vertices, std::vector<GLuint> indices, GLenum usage)
