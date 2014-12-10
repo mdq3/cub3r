@@ -1,3 +1,21 @@
+/*
+  Copyright Michael Quested 2014.
+
+  This file is part of Cub3r.
+
+  Cub3r is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Cub3r is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Cub3r.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #include <iostream>
 #include <fstream>
@@ -10,16 +28,22 @@
 Scene::Scene(int width, int height) :
 camera{width, height},
 cameraSpeed{0.1},
-depthBiasMVP(glm::mat4(1.0f))
+depthBiasMVP(glm::mat4(1.0f)),
+ambientLightValue{0.5f}
 {
     light.position = glm::vec3(-10.0f, 10.0f, 10.0f);
     light.rgb = glm::vec3(1.0f);
     light.attenuation = 0.0f;
-    light.ambientCoefficient = 0.5f;
-    light.target = glm::vec3(0.0f, 0.0f, 0.0f);
+    light.target = glm::vec3(0.0f);
     light.direction = glm::normalize(glm::vec3(light.position.x - light.target.x,
                                                light.position.y - light.target.y,
                                                light.position.z - light.target.z));
+
+    glm::vec3 position = glm::vec3(-10.0f, 10.0f, 10.0f);
+    glm::vec3 rgb = glm::vec3(1.0f);
+    glm::vec3 target = glm::vec3(0.0f);
+    std::unique_ptr<Lighter> lightPtr(new DirectionalLight(position, rgb, 0.0f, target));
+    lights.push_back(std::move(lightPtr));
 }
 
 Scene::~Scene() {}
@@ -101,6 +125,7 @@ void Scene::shadowPass()
     plane.renderShadowMap(shaderProgramShadowMap);
 
     glDisableVertexAttribArray(0);
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0); // Bind windowing system's framebuffer
     glDisable(GL_POLYGON_OFFSET_FILL);
 }
@@ -174,14 +199,14 @@ void Scene::updateLightsAndCamera()
     GLint attenuation = glGetUniformLocation(currentShaderProgram, "light.attenuation");
     glUniform1f(attenuation, light.attenuation);
 
-    GLint ambientCoefficient = glGetUniformLocation(currentShaderProgram, "light.ambientCoefficient");
-    glUniform1f(ambientCoefficient, light.ambientCoefficient);
-
     GLint direction = glGetUniformLocation(currentShaderProgram, "light.direction");
     glUniform3fv(direction, 1, &light.direction[0]);
 
     GLint isPoint = glGetUniformLocation(currentShaderProgram, "light.isPoint");
     glUniform1i(isPoint, GL_FALSE);
+
+    GLint ambientLight = glGetUniformLocation(currentShaderProgram, "ambientLight");
+    glUniform1f(ambientLight, ambientLightValue);
 
     GLint cameraPosition = glGetUniformLocation(currentShaderProgram, "cameraPosition");
     glUniform3fv(cameraPosition, 1, &getCameraPosition()[0]);

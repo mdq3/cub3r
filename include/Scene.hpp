@@ -1,3 +1,22 @@
+/*
+  Copyright Michael Quested 2014.
+
+  This file is part of Cub3r.
+
+  Cub3r is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Cub3r is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Cub3r.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 /**
  * Represents a 3D scene with lights, camera and models.
  *
@@ -12,6 +31,9 @@
 #include "Camera.hpp"
 #include "Cube.hpp"
 #include "Model.hpp"
+
+#include <memory>
+#include "Light.hpp"
 
 class Scene {
  public:
@@ -86,6 +108,8 @@ class Scene {
     glm::mat4 depthBiasMVP;        // The view projection matrix in light-space for shadow map rendering
     GLuint shaderProgramShadowMap; // Shader program for rendering shadow map
 
+    std::vector<std::unique_ptr<Lighter>> lights;
+
     // Bias matrix for converting space coord to image coord (-1.0 to 1.0 -> 0.0 to 1.0)
     const glm::mat4 biasMatrix = glm::mat4(
         0.5f, 0.0f, 0.0f, 0.0f,
@@ -98,10 +122,11 @@ class Scene {
         glm::vec3 position;
         glm::vec3 rgb;
         GLfloat attenuation;
-        GLfloat ambientCoefficient;
         glm::vec3 target;
         glm::vec3 direction;
     } light;
+
+    GLfloat ambientLightValue;
 
     /**
      * Reads shader source from file, compiles and attaches shader to

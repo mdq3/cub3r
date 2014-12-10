@@ -1,3 +1,22 @@
+/*
+  Copyright Michael Quested 2014.
+
+  This file is part of Cub3r.
+
+  Cub3r is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Cub3r is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Cub3r.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #version 330 core
 
 uniform struct Light
@@ -5,10 +24,11 @@ uniform struct Light
     vec3 position;
     vec3 rgb;
     float attenuation;
-    float ambientCoefficient;
     vec3 direction;
     bool isPoint;
 } light;
+
+uniform float ambientLight;
 
 uniform sampler2D textureSampler;
 uniform sampler2DShadow shadowMap;
@@ -42,7 +62,7 @@ void main()
     }
 
     // Ambient component
-    vec3 ambient = light.ambientCoefficient * surfaceColor.rgb * light.rgb;
+    vec3 ambient = ambientLight * surfaceColor.rgb * light.rgb;
 
     // Diffuse component
     float diffuse = max(0.0, dot(normal, surfaceToLight));
@@ -79,7 +99,7 @@ void main()
     vec3 scatteredLight = ambient + light.rgb * diffuse * shadow;
     vec3 reflectedLight = light.rgb * specular * attenuation;
 
-    vec3 linearColor    = min(surfaceColor.rgb * scatteredLight + reflectedLight, vec3(1.0));
+    vec3 linearColor = min(surfaceColor.rgb * scatteredLight + reflectedLight, vec3(1.0));
     color = vec4(linearColor, surfaceColor.a);
 
     // Final color (with gamma correction)
